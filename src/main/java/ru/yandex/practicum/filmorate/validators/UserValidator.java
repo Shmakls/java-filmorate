@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.validators;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 @Slf4j
 public class UserValidator {
 
-    public boolean validator(User user) {
+    public boolean isValid(User user) throws ValidationException {
 
         emailValidator(user.getEmail());
 
@@ -26,9 +27,9 @@ public class UserValidator {
 
     }
 
-    private boolean emailValidator(String email) {
+    private boolean emailValidator(String email) throws ValidationException {
 
-        if (email.isEmpty()) {
+        if (!StringUtils.hasText(email)) {
             log.info("Мыло пустое.");
             throw new ValidationException("E-mail не может быть пустым.");
         }
@@ -41,9 +42,9 @@ public class UserValidator {
         return true;
     }
 
-    private boolean loginValidator(String login)  {
+    private boolean loginValidator(String login) throws ValidationException {
 
-        if (login.isEmpty()) {
+        if (!StringUtils.hasText(login)) {
             log.info("Пустой логин.");
             throw new ValidationException("Логин не может быть пустым.");
         }
@@ -57,7 +58,7 @@ public class UserValidator {
 
     }
 
-    private boolean BirthdayValidator(LocalDate birthdate) {
+    private boolean BirthdayValidator(LocalDate birthdate) throws ValidationException {
 
         if (birthdate.isAfter(LocalDate.now())) {
             log.info("Дата рождения позже текущей.");

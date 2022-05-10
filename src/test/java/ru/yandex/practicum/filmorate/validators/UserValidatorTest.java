@@ -22,13 +22,13 @@ class UserValidatorTest {
     }
 
     @Test
-    void validatorWorksSuccessful() {
+    void validatorWorksSuccessful() throws ValidationException {
 
         user1 = new User(1, "user1@ya.ru", "user1");
         user1.setBirthday(LocalDate.of(1989, 7, 29));
         user1.setName("Пользователь1");
 
-        assertTrue(userValidator.validator(user1));
+        assertTrue(userValidator.isValid(user1));
 
     }
 
@@ -39,7 +39,7 @@ class UserValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> userValidator.validator(user1)
+                () -> userValidator.isValid(user1)
         );
 
         assertEquals("E-mail не может быть пустым.", exception.getMessage());
@@ -53,7 +53,7 @@ class UserValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> userValidator.validator(user1)
+                () -> userValidator.isValid(user1)
         );
 
         assertEquals("E-mail должен содержать символ \"@\".", exception.getMessage());
@@ -67,7 +67,7 @@ class UserValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> userValidator.validator(user1)
+                () -> userValidator.isValid(user1)
         );
 
         assertEquals("Логин не может быть пустым.", exception.getMessage());
@@ -81,7 +81,7 @@ class UserValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> userValidator.validator(user1)
+                () -> userValidator.isValid(user1)
         );
 
         assertEquals("Логин не может содержать пробелы.", exception.getMessage());
@@ -96,7 +96,7 @@ class UserValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> userValidator.validator(user1)
+                () -> userValidator.isValid(user1)
         );
 
         assertEquals("Дата рождения не может быть позже настоящей!", exception.getMessage());
@@ -104,13 +104,13 @@ class UserValidatorTest {
     }
 
     @Test
-    void shouldBeUseLoginIfNameIsEmpty() {
+    void shouldBeUseLoginIfNameIsEmpty() throws ValidationException {
 
         user1 = new User(1, "user1@ya.ru", "user1");
         user1.setBirthday(LocalDate.of(1989, 7, 29));
         user1.setName("");
 
-        userValidator.validator(user1);
+        userValidator.isValid(user1);
 
         assertEquals("user1", user1.getName());
 

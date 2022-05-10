@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 
@@ -21,12 +20,12 @@ class FilmValidatorTest {
     }
 
     @Test
-    void validatorWorksSuccessful() {
+    void validatorWorksSuccessful() throws ValidationException {
 
         film1 = new Film(1, "film1", "DescriptionFilm1",
                 LocalDate.of(2012, 12, 12), 5400);
 
-        assertTrue(filmValidator.validator(film1));
+        assertTrue(filmValidator.isValid(film1));
 
     }
 
@@ -38,7 +37,7 @@ class FilmValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> filmValidator.validator(film1)
+                () -> filmValidator.isValid(film1)
         );
 
         assertEquals("Название фильма не может быть пустым.", exception.getMessage());
@@ -63,7 +62,7 @@ class FilmValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> filmValidator.validator(film1)
+                () -> filmValidator.isValid(film1)
         );
 
         assertEquals("Описание не может быть больше 200 символов", exception.getMessage());
@@ -78,7 +77,7 @@ class FilmValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> filmValidator.validator(film1)
+                () -> filmValidator.isValid(film1)
         );
 
         assertEquals("Описание не может быть пустым.", exception.getMessage());
@@ -93,7 +92,7 @@ class FilmValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> filmValidator.validator(film1)
+                () -> filmValidator.isValid(film1)
         );
 
         assertEquals("Дата релиза не может быть раньше 28 декабря 1895 года.", exception.getMessage());
@@ -108,7 +107,7 @@ class FilmValidatorTest {
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
-                () -> filmValidator.validator(film1)
+                () -> filmValidator.isValid(film1)
         );
 
         assertEquals("Продолжительность фильма должна быть положительной.", exception.getMessage()); //Negative test
@@ -118,7 +117,7 @@ class FilmValidatorTest {
 
         final ValidationException exception1 = assertThrows(
                 ValidationException.class,
-                () -> filmValidator.validator(film2)
+                () -> filmValidator.isValid(film2)
         );
 
         assertEquals("Продолжительность фильма должна быть положительной.", exception.getMessage()); //Zero test
