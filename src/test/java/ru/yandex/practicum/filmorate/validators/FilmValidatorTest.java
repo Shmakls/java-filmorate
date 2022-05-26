@@ -22,7 +22,7 @@ class FilmValidatorTest {
     @Test
     void validatorWorksSuccessful() throws ValidationException {
 
-        film1 = new Film(1, "film1", "DescriptionFilm1",
+        film1 = new Film("film1", "DescriptionFilm1",
                 LocalDate.of(2012, 12, 12), 5400);
 
         assertTrue(filmValidator.isValid(film1));
@@ -32,7 +32,7 @@ class FilmValidatorTest {
     @Test
     void shouldBeThrowExceptionIfNameIsEmpty() {
 
-        film1 = new Film(1, "", "DescriptionFilm1",
+        film1 = new Film("", "DescriptionFilm1",
                 LocalDate.of(2012, 12, 12), 5400);
 
         final ValidationException exception = assertThrows(
@@ -57,7 +57,7 @@ class FilmValidatorTest {
 
         String description = sb.toString();
 
-        film1 = new Film(1, "film1", description,
+        film1 = new Film("film1", description,
                 LocalDate.of(2012, 12, 12), 5400);
 
         final ValidationException exception = assertThrows(
@@ -72,7 +72,7 @@ class FilmValidatorTest {
     @Test
     void shouldBeThrowExceptionIfDescriptionIsEmpty() {
 
-        film1 = new Film(1, "film1", "",
+        film1 = new Film("film1", "",
                 LocalDate.of(2012, 12, 12), 5400);
 
         final ValidationException exception = assertThrows(
@@ -87,7 +87,7 @@ class FilmValidatorTest {
     @Test
     void shouldBeThrowExceptionIfReleaseDateIsBefore28Dec1895() {
 
-        film1 = new Film(1, "film1", "DescriptionFilm1",
+        film1 = new Film("film1", "DescriptionFilm1",
                 LocalDate.of(1895, 12, 27), 5400);
 
         final ValidationException exception = assertThrows(
@@ -102,7 +102,7 @@ class FilmValidatorTest {
     @Test
     void shouldBeThrowExceptionIfDurationIsNotPositive() {
 
-        film1 = new Film(1, "film1", "DescriptionFilm1",
+        film1 = new Film("film1", "DescriptionFilm1",
                 LocalDate.of(2012, 12, 12), -5400);
 
         final ValidationException exception = assertThrows(
@@ -112,7 +112,7 @@ class FilmValidatorTest {
 
         assertEquals("Продолжительность фильма должна быть положительной.", exception.getMessage()); //Negative test
 
-        Film film2 = new Film(2, "film2", "DescriptionFilm2",
+        Film film2 = new Film("film2", "DescriptionFilm2",
                 LocalDate.of(2012, 12, 12), 0);
 
         final ValidationException exception1 = assertThrows(

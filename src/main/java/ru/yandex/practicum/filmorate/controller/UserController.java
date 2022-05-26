@@ -2,13 +2,12 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.Context;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.validators.UserValidator;
+import ru.yandex.practicum.filmorate.service.UserService;
 
-import javax.validation.Valid;
+
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 @RestController
@@ -16,37 +15,73 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class UserController {
 
-    private Map<String, User> users = new ConcurrentHashMap<>();
+    private UserService userService = Context.USER_SERVICE;
 
-    private UserValidator userValidator = new UserValidator();
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable int id) {
+        return userService.getUserById(id);
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public String addNewFriend(@PathVariable int id, @PathVariable int friendId) {
+
+        userService.addFriend(id, friendId);
+
+        return ("Пользователи " + userService.getUserById(id).getLogin() + " и "
+                + userService.getUserById(friendId).getLogin() + " добавили друг друга в друзья");
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public String deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+
+        userService.deleteFromFriends(id, friendId);
+
+        return ("Пользователи " + userService.getUserById(id).getLogin() + " и "
+                + userService.getUserById(friendId).getLogin() + " удалили друг друга из друзей");
+
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getFriendsList(@PathVariable int id) {
+
+        return userService.getFriendList(id);
+
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriend(@PathVariable int id, @PathVariable int otherId) {
+
+        return userService.getCommonFriendsListAsLogins(id, otherId);
+    }
 
     @PostMapping
-    public User createUser(@RequestBody User user) throws ValidationException {
+    public User createUser(@RequestBody User user) {
 
-        userValidator.isValid(user);
-
-        users.put(user.getEmail(), user);
+        userService.createUser(user);
 
         log.info("Получен запрос на создание пользователя - {}", user.getEmail());
 
-        return users.get(user.getEmail());
+        return user;
     }
 
     @PutMapping
-    public void updateUser(@RequestBody User user) throws ValidationException {
-
-        userValidator.isValid(user);
-
-        users.put(user.getEmail(), user);
+    public User updateUser(@RequestBody User user) {
 
         log.info("Получен запрос на обновление пользователя - {}", user.getEmail());
 
+        return userService.updateUser(user);
+
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable int id) {
+        userService.deleteUser(id);
     }
 
     @GetMapping
     public List<User> findAll() {
 
-        return new ArrayList<>(users.values());
+        return userService.findAll();
 
     }
 
