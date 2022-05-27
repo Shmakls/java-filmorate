@@ -36,12 +36,4 @@ public class ErrorHandler {
 
     }
 
-    /* @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse UnforeseenExceptionHandler(final Throwable e) {
-
-        return new ErrorResponse("Произошла непредвиденная ошибка.");
-
-    } */
-
 }

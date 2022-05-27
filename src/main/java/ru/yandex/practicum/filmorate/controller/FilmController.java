@@ -63,10 +63,6 @@ public class FilmController {
     @GetMapping("/popular")
     public List<Film> topFilmsByLikes(@RequestParam(defaultValue = "10") Integer count) {
 
-        if (count < 1) {
-            throw new IncorrectParameterException("Количество отображаемых фильмов не может быть меньше 1", count);
-        }
-
         return filmService.topLikes(count);
 
     }

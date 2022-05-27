@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.AlreadyExistException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage.FilmStorage;
@@ -44,7 +45,7 @@ public class FilmService {
         filmValidator.isValid(film);
 
         if (film.getId() < 1) {
-            throw new IncorrectIdException("ИДИ НАХУЙ БЛЯТЬ С ТАКИМ ID");
+            throw new IncorrectIdException("ID не может быть отрицательным");
         }
 
         return filmStorage.update(film);
@@ -83,7 +84,11 @@ public class FilmService {
         Film film = filmStorage.getById(id);
 
         if (!film.getLikes().add(userId)) {
-            throw new AlreadyExistException("Пользователь уже лайкнул этот фильм");
+            try {
+                throw new AlreadyExistException("Пользователь уже лайкнул этот фильм");
+            } catch (AlreadyExistException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return ("Пользователь " + userService.getUserById(userId).getLogin() + " поставил лайк фильму "
@@ -111,6 +116,10 @@ public class FilmService {
     }
 
     public List<Film> topLikes(Integer count) {
+
+        if (count < 1) {
+            throw new IncorrectParameterException("Количество отображаемых фильмов не может быть меньше 1", count);
+        }
 
         if (count > filmStorage.findAll().size()) {
             count = filmStorage.findAll().size();
