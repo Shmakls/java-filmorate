@@ -24,8 +24,7 @@ class UserValidatorTest {
     @Test
     void validatorWorksSuccessful() throws ValidationException {
 
-        user1 = new User(1, "user1@ya.ru", "user1");
-        user1.setBirthday(LocalDate.of(1989, 7, 29));
+        user1 = new User("user1@ya.ru", "user1", LocalDate.of(1989, 7, 29));
         user1.setName("Пользователь1");
 
         assertTrue(userValidator.isValid(user1));
@@ -35,7 +34,7 @@ class UserValidatorTest {
     @Test
     void shouldBeThrowExceptionIfEmailIsEmpty() {
 
-        user1 = new User(1, "", "user1");
+        user1 = new User("", "user1", LocalDate.of(1989, 7, 29));
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
@@ -49,7 +48,7 @@ class UserValidatorTest {
     @Test
     void shouldBeThrowExceptionIfEmailNotHaveAt() {
 
-        user1 = new User(1, "user1-ya.ru", "user1");
+        user1 = new User("user1-ya.ru", "user1", LocalDate.of(1989, 7, 29));
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
@@ -63,7 +62,7 @@ class UserValidatorTest {
     @Test
     void shouldBeThrowExceptionIfLoginIsEmpty() {
 
-        user1 = new User(1, "user1@ya.ru", "");
+        user1 = new User("user1@ya.ru", "", LocalDate.of(1989, 7, 29));
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
@@ -77,7 +76,7 @@ class UserValidatorTest {
     @Test
     void shouldBeThrowExceptionIfLoginHasSpaceSymbol() {
 
-        user1 = new User(1, "user1@ya.ru", "user 1");
+        user1 = new User("user1@ya.ru", "user 1", LocalDate.of(1989, 7, 29));
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
@@ -91,8 +90,7 @@ class UserValidatorTest {
     @Test
     void shouldBeThrowExceptionIfBirthdayIsAfterNow() {
 
-        user1 = new User(1, "user1@ya.ru", "user1");
-        user1.setBirthday(LocalDate.now().plusYears(1));
+        user1 = new User("user1@ya.ru", "user1", LocalDate.now().plusYears(1));
 
         final ValidationException exception = assertThrows(
                 ValidationException.class,
@@ -104,10 +102,9 @@ class UserValidatorTest {
     }
 
     @Test
-    void shouldBeUseLoginIfNameIsEmpty() throws ValidationException {
+    void shouldBeUseLoginIfNameIsEmpty() {
 
-        user1 = new User(1, "user1@ya.ru", "user1");
-        user1.setBirthday(LocalDate.of(1989, 7, 29));
+        user1 = new User("user1@ya.ru", "user1", LocalDate.of(1989, 7, 29));
         user1.setName("");
 
         userValidator.isValid(user1);

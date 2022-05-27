@@ -1,19 +1,26 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.RequiredArgsConstructor;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
+@RequiredArgsConstructor
 public class Film {
 
-    private final int id;
+    private Integer id;
+
     private final String name;
+
     private final String description;
+
     private final LocalDate releaseDate;
+
     private final int duration;
+
+    private Set<Integer> likes = new HashSet<>();
 
 }
