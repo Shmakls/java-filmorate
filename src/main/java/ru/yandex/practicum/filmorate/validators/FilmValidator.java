@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.time.LocalDate;
 
@@ -19,6 +20,8 @@ public class FilmValidator {
         releaseDateValidator(film.getReleaseDate());
 
         durationValidator(film.getDuration());
+
+        mpaValidator(film.getMpa());
 
         return true;
 
@@ -67,6 +70,17 @@ public class FilmValidator {
         if (duration <= 0) {
             log.info("Продолжительность фильма не положительная.");
             throw new ValidationException("Продолжительность фильма должна быть положительной.");
+        }
+
+        return true;
+
+    }
+
+    private boolean mpaValidator(Mpa mpa) {
+
+        if (mpa == null) {
+            log.info("mpa не существует");
+            throw new ValidationException("Рейтинг mpa не может быть null");
         }
 
         return true;

@@ -1,36 +1,39 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exceptions.AlreadyExistException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.FilmStorage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.InMemory.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemory.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 class FilmServiceTest {
 
-    FilmService filmService;
+    private final FilmService filmService;
+    private final UserService userService;
 
     Film film1;
     Film film2;
 
     User user1;
-    UserService userService;
 
     @BeforeEach
     void beforeEach() {
-
-        userService = new UserService(new InMemoryUserStorage());
-
-        filmService = new FilmService(new InMemoryFilmStorage(), userService);
-
 
         user1 = new User("user1@ya.ru", "user1", LocalDate.of(1989, 7, 29));
         user1.setName("Пользователь 1");
@@ -47,8 +50,10 @@ class FilmServiceTest {
 
         film1 = new Film("film1", "descriptionFilm1", LocalDate.of(2020, 12, 12), 90);
         film1.setId(1);
+        film1.setMpa(new Mpa(1));
         film2 = new Film("film2", "descriptionFilm2", LocalDate.of(2020, 11, 11), 100);
         film2.setId(2);
+        film2.setMpa(new Mpa(2));
 
     }
 
@@ -57,7 +62,7 @@ class FilmServiceTest {
 
         filmService.addLike(1, 1);
 
-        assertTrue(film1.getLikes().contains(1));
+        assertTrue(filmService.getFilmById(1).getLikes().contains(1));
     }
 
     @Test
@@ -86,6 +91,7 @@ class FilmServiceTest {
 
         Film film3 = new Film("film3", "descriptionFilm3", LocalDate.of(2020, 10, 10), 110);
         film3.setId(3);
+        film3.setMpa(new Mpa(1));
 
         filmService.addFilm(film3);
 
@@ -98,6 +104,7 @@ class FilmServiceTest {
 
         Film film3 = new Film("film3", "descriptionFilm3", LocalDate.of(2020, 10, 10), 110);
         film3.setId(3);
+        film3.setMpa(new Mpa(1));
 
         filmService.updateFilm(film3);
 
@@ -212,10 +219,13 @@ class FilmServiceTest {
 
         Film film3 = new Film("film3", "descriptionFilm3", LocalDate.of(2020, 10, 10), 110);
         film3.setId(3);
+        film3.setMpa(new Mpa(1));
         Film film4 = new Film("film4", "descriptionFilm4", LocalDate.of(2020, 9, 9), 120);
         film4.setId(4);
+        film4.setMpa(new Mpa(1));
         Film film5 = new Film("film5", "descriptionFilm5", LocalDate.of(2020, 8, 8), 130);
         film5.setId(5);
+        film5.setMpa(new Mpa(1));
 
         filmService.addFilm(film3);
         filmService.addFilm(film4);

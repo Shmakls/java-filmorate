@@ -1,7 +1,9 @@
-package ru.yandex.practicum.filmorate.storage.UserStorage;
+package ru.yandex.practicum.filmorate.storage.InMemory;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.UserStorage.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +11,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@Qualifier("InMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
 
     private Map<Integer, User> users = new ConcurrentHashMap<>();
 
     @Override
-    public User add(User user) {
+    public User save(User user) {
 
         users.put(user.getId(), user);
 

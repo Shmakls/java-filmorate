@@ -1,17 +1,20 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.AlreadyExistException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +27,8 @@ public class FilmService {
 
     private Integer id = 0;
 
-    public FilmService(FilmStorage filmStorage, UserService userService) {
+    @Autowired
+    public FilmService(@Qualifier("FilmDbStorage") FilmStorage filmStorage, UserService userService) {
         this.userService = userService;
         this.filmStorage = filmStorage;
         filmValidator = new FilmValidator();
@@ -36,7 +40,7 @@ public class FilmService {
 
         film.setId(++id);
 
-        return filmStorage.add(film);
+        return filmStorage.save(film);
 
     }
 
@@ -67,7 +71,7 @@ public class FilmService {
             throw new IncorrectIdException("Такой ID не сушествует.");
         }
 
-        return filmStorage.getById(id);
+        return filmStorage.getFilmById(id);
 
     }
 
@@ -81,18 +85,18 @@ public class FilmService {
             throw new IncorrectIdException("Такого фильма не существует");
         }
 
-        Film film = filmStorage.getById(id);
+        Film film = filmStorage.getFilmById(id);
 
-        if (!film.getLikes().add(userId)) {
-            try {
-                throw new AlreadyExistException("Пользователь уже лайкнул этот фильм");
-            } catch (AlreadyExistException e) {
-                throw new RuntimeException(e);
-            }
+        Set<Integer> likes = film.getLikes();
+
+        if (!likes.add(userId)) {
+            throw new AlreadyExistException("Пользователь уже лайкнул этот фильм");
         }
 
+        filmStorage.update(film);
+
         return ("Пользователь " + userService.getUserById(userId).getLogin() + " поставил лайк фильму "
-                + filmStorage.getById(id).getName() + ".");
+                + filmStorage.getFilmById(id).getName() + ".");
 
     }
 
@@ -102,7 +106,7 @@ public class FilmService {
             throw new IncorrectIdException("Такого фильма не существует");
         }
 
-        Film film = filmStorage.getById(id);
+        Film film = filmStorage.getFilmById(id);
 
         if (!film.getLikes().contains(userId)) {
             throw new IncorrectIdException("Этот пользователь не ставил лайк этому фильму");
@@ -110,8 +114,10 @@ public class FilmService {
 
         film.getLikes().remove(userId);
 
+        updateFilm(film);
+
         return ("Пользователь " + userService.getUserById(userId).getLogin() + " убрал лайк у фильма "
-                + filmStorage.getById(id).getName() + ".");
+                + filmStorage.getFilmById(id).getName() + ".");
 
     }
 
@@ -130,6 +136,38 @@ public class FilmService {
                 .limit(count)
                 .collect(Collectors.toList());
 
+    }
+
+    public List<Genre> findAllGenres() {
+        return filmStorage.getAllGenres();
+    }
+
+    public Genre getGenreById(Integer id) {
+
+        List<Genre> allGenres = findAllGenres();
+
+        if (id > allGenres.size() || id < 1) {
+            throw new IncorrectIdException("Некорректиный Id жанра");
+        }
+
+        return allGenres.stream().filter(x -> x.getId() == id).findFirst().get();
+
+    }
+
+    public Mpa getMpaById(Integer id) {
+
+        List<Mpa> allMpa = findAllMpa();
+
+        if (id > allMpa.size() || id < 1) {
+            throw new IncorrectIdException("Некорректный Id рейтинга");
+        }
+
+        return allMpa.stream().filter(x -> x.getId() == id).findFirst().get();
+
+    }
+
+    public List<Mpa> findAllMpa() {
+        return filmStorage.getAllMpa();
     }
 
 }

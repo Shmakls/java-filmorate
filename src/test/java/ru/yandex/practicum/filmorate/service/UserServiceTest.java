@@ -1,19 +1,25 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 class UserServiceTest {
 
-    UserService userService;
+    private final UserService userService;
 
     User user1;
     User user2;
@@ -23,8 +29,6 @@ class UserServiceTest {
 
     @BeforeEach
     void beforeEach() {
-
-        userService = new UserService(new InMemoryUserStorage());
 
         user1 = new User("user1@ya.ru", "user1", LocalDate.of(1989, 7, 29));
         user1.setName("Пользователь 1");
@@ -43,6 +47,7 @@ class UserServiceTest {
         user5.setName("Пользователь 5");
 
     }
+
 
     @Test
     void shouldBeAddUserToRep() {
@@ -117,7 +122,7 @@ class UserServiceTest {
         userService.addFriend(1, 3);
 
         assertTrue(userService.getUserById(1).getFriends().contains(3));
-        assertTrue(userService.getUserById(3).getFriends().contains(1));
+
     }
 
     @Test
@@ -128,6 +133,7 @@ class UserServiceTest {
         userService.createUser(user3);
 
         userService.addFriend(1, 3);
+        userService.addFriend(3, 1);
 
         final IncorrectIdException exception = assertThrows(
                 IncorrectIdException.class,
@@ -146,7 +152,7 @@ class UserServiceTest {
         userService.addFriend(1, 3);
 
         assertTrue(userService.getUserById(1).getFriends().contains(3));
-        assertTrue(userService.getUserById(3).getFriends().contains(1));
+
 
         userService.deleteFromFriends(1, 3);
 

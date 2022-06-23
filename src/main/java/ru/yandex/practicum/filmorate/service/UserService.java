@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.service;
 
 import com.google.common.collect.Sets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -20,7 +22,8 @@ public class UserService {
 
     private Integer id = 0;
 
-    public UserService(UserStorage userStorage) {
+    @Autowired
+    public UserService(@Qualifier("UserDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
         userValidator = new UserValidator();
     }
@@ -31,7 +34,7 @@ public class UserService {
 
         user.setId(++id);
 
-        return userStorage.add(user);
+        return userStorage.save(user);
 
     }
 
@@ -62,8 +65,8 @@ public class UserService {
             throw new IncorrectIdException("ID не может быть отрицательным");
         }
 
-        User user1 = userStorage.getUserById(id);
-        User user2 = userStorage.getUserById(friendId);
+        User user1 = getUserById(id);
+        User user2 = getUserById(friendId);
 
         Set<Integer> friends = user1.getFriends();
 
@@ -71,20 +74,20 @@ public class UserService {
             throw new IncorrectIdException("Пользователь уже есть в друзьях");
         }
 
-        user2.getFriends().add(user1.getId());
+        userStorage.update(user1);
 
     }
 
     public void deleteFromFriends(Integer id, Integer friendId) {
 
-        User user1 = userStorage.getUserById(id);
-        User user2 = userStorage.getUserById(friendId);
+        User user1 = getUserById(id);
+        User user2 = getUserById(friendId);
 
         if (!user1.getFriends().remove(user2.getId())) {
             throw new IncorrectIdException("Пользователи не друзья");
         }
 
-        user2.getFriends().remove(user1.getId());
+        userStorage.update(user1);
 
     }
 

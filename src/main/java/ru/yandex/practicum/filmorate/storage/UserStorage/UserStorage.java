@@ -6,16 +6,16 @@ import java.util.List;
 
 public interface UserStorage {
 
-    public User add(User user);
+    User save(User user);
 
-    public User update(User user);
+    User update(User user);
 
-    public void delete(Integer id);
+    void delete(Integer id);
 
-    public List<User> findAll();
+    List<User> findAll();
 
-    public User getUserById(Integer id);
+    User getUserById(Integer id);
 
-    public boolean isContains(Integer id);
+    boolean isContains(Integer id);
 
 }
