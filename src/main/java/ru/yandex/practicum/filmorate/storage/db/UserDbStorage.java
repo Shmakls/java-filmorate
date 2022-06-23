@@ -36,7 +36,6 @@ public class UserDbStorage implements UserStorage {
         User userWithId = usersDao.save(user);
 
         friendsListDao.saveFriendList(userWithId);
-        subscribersListDao.saveSubscribesList(userWithId);
 
         return userWithId;
 
@@ -51,9 +50,6 @@ public class UserDbStorage implements UserStorage {
 
             friendsListDao.delete(user.getId());
             friendsListDao.saveFriendList(user);
-
-            subscribersListDao.delete(user.getId());
-            subscribersListDao.saveSubscribesList(user);
 
             jdbcTemplate.update(sql, user.getEmail(),
                     user.getLogin(),
@@ -73,8 +69,6 @@ public class UserDbStorage implements UserStorage {
     public void delete(Integer id) {
 
         friendsListDao.delete(id);
-
-        subscribersListDao.delete(id);
 
         usersDao.deleteUserById(id);
 
@@ -100,7 +94,6 @@ public class UserDbStorage implements UserStorage {
         User user = usersDao.getUserById(id);
 
         user.setFriends(friendsListDao.getFriendListById(id));
-        user.setSubscribers(subscribersListDao.getSubscribesListById(id));
 
         return user;
 
