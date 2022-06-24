@@ -21,12 +21,12 @@ public class LikesListDao {
 
     public void saveLikesListByFilm(Film film) {
 
-        String sql = "INSERT INTO LIKESLIST (film_id, user_id) VALUES (" + film.getId() + ", ?)";
+        String sql = "INSERT INTO LIKESLIST (film_id, user_id) VALUES (?, ?)";
 
         Set<Integer> likes = film.getLikes();
 
         for (Integer like : likes) {
-            jdbcTemplate.update(sql, like);
+            jdbcTemplate.update(sql, film.getId(), like);
         }
 
     }

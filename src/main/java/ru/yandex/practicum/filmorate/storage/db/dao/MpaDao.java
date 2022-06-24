@@ -22,9 +22,8 @@ public class MpaDao {
 
         List<Mpa> allMpa = getAllMpa();
 
-        return allMpa.stream().filter(x -> x.getId() == id).findFirst().get();
-
-
+        return allMpa.stream().filter(x -> x.getId() == id).findFirst().
+                orElseThrow(() -> new IncorrectIdException("По данному id " + id + " рейтига mpa не найдено"));
 
     }
 
