@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.time.LocalDate;
 
@@ -24,6 +25,8 @@ class FilmValidatorTest {
 
         film1 = new Film("film1", "DescriptionFilm1",
                 LocalDate.of(2012, 12, 12), 5400);
+
+        film1.setMpa(new Mpa(1));
 
         assertTrue(filmValidator.isValid(film1));
 
@@ -121,6 +124,21 @@ class FilmValidatorTest {
         );
 
         assertEquals("Продолжительность фильма должна быть положительной.", exception.getMessage()); //Zero test
+
+    }
+
+    @Test
+    void shouldBeThrowExceptionIfMpaIsNull() {
+
+        film1 = new Film("film1", "DescriptionFilm1",
+                LocalDate.of(2012, 12, 12), 5400);
+
+        final ValidationException exception = assertThrows(
+                ValidationException.class,
+                () -> filmValidator.isValid(film1)
+        );
+
+        assertEquals("Рейтинг mpa не может быть null", exception.getMessage());
 
     }
 

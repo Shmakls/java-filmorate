@@ -2,10 +2,11 @@ package ru.yandex.practicum.filmorate.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.Context;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.List;
@@ -15,7 +16,12 @@ import java.util.List;
 @Slf4j
 public class FilmController {
 
-    private FilmService filmService = Context.FILM_SERVICE;
+    private FilmService filmService;
+
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     @GetMapping("/{id}")
     public Film getFilmById(@PathVariable int id) {
@@ -66,6 +72,5 @@ public class FilmController {
         return filmService.topLikes(count);
 
     }
-
 
 }

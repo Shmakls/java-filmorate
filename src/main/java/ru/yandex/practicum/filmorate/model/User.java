@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,5 +24,7 @@ public class User {
     private final LocalDate birthday;
 
     private Set<Integer> friends = new HashSet<>();
+
+    private Set<Integer> subscribers = new HashSet<>();
 
 }
