@@ -5,8 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.sql.JDBCType;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -45,5 +45,35 @@ public class LikesListDao {
 
         jdbcTemplate.update(sql, id);
 
+    }
+
+    public List<Integer> getTopFilms(int count) {
+        String sql = "SELECT film_id FROM LIKESLIST GROUP BY film_id ORDER BY COUNT(user_id) DESC LIMIT ?";
+        return jdbcTemplate.queryForList(sql, Integer.class, count);
+    }
+
+    // Получение id топа фильмов за N год. Сортировка по лайкам
+    public List<Integer> getTopFilmsByYear(int year) {
+        String sql = "SELECT fy.film_id " +
+                "FROM (SELECT film_id " +
+                "FROM FILMS " +
+                "WHERE year(releasedate) = ?) AS fy " +
+                "INNER JOIN likeslist l on fy.film_id = l.film_id " +
+                "GROUP BY l.film_id " +
+                "ORDER BY COUNT(user_id) DESC";
+        return jdbcTemplate.queryForList(sql, Integer.class, year);
+    }
+
+    // Получение id топа фильмов за N год. Сортировка по лайкам
+    public List<Integer> getTopFilmsByGenre(int genre) {
+        String sql = "SELECT fg.film_id " +
+                "FROM (SELECT films.film_id " +
+                "FROM films " +
+                "INNER JOIN genreslist as g ON films.film_id = g.film_id" +
+                "WHERE genre_id = ?) AS fg " +
+                "INNER JOIN likeslist l on fg.film_id = l.film_id " +
+                "GROUP BY l.film_id " +
+                "ORDER BY COUNT(user_id) DESC";
+        return jdbcTemplate.queryForList(sql, Integer.class, genre);
     }
 }

@@ -28,4 +28,9 @@ public interface FilmStorage {
 
     List<Mpa> getAllMpa();
 
+    List<Integer> getTopFilms(int count);
+
+    List<Integer> getTopYearFilm(int year);
+
+    List<Integer> getTopGenreFilm(int genreId);
 }

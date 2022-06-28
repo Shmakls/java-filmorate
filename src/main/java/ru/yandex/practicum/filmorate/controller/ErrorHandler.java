@@ -9,6 +9,8 @@ import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 
+import javax.validation.ConstraintViolationException;
+
 @RestControllerAdvice
 public class ErrorHandler {
 
@@ -35,5 +37,12 @@ public class ErrorHandler {
         return new ErrorResponse("Ошибка с полем: " + e.getParameter());
 
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse controllerValidateHandler(ConstraintViolationException exp) {
+        return new ErrorResponse("Проверьте передаваемые значения. Они должны существовать и быть больше 0");
+    }
+
 
 }

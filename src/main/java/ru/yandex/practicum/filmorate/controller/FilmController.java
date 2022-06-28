@@ -3,17 +3,29 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/films")
 @Slf4j
+@Validated
 public class FilmController {
 
     private FilmService filmService;
@@ -67,10 +79,10 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<Film> topFilmsByLikes(@RequestParam(defaultValue = "10") Integer count) {
+    public List<Film> topFilmsByLikes(@RequestParam(required = false, defaultValue = "10") @Positive int count,
+                                      @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int genreId,
+                                      @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int date) {
 
-        return filmService.topLikes(count);
-
+        return filmService.topLikes(count, genreId, date);
     }
-
 }

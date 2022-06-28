@@ -5,13 +5,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.AlreadyExistException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.db.FilmDbStorage;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -121,21 +123,55 @@ public class FilmService {
 
     }
 
-    public List<Film> topLikes(Integer count) {
+    // Получение топ N фильмов. В случае если genreId и/или year > 0 применяем фильтрацию по ним.
+    public List<Film> topLikes(int count, int genreId, int year) {
 
-        if (count < 1) {
-            throw new IncorrectParameterException("Количество отображаемых фильмов не может быть меньше 1", count);
+        if (genreId > 0 || year > 0) {
+            return getTopFilmsByFilter(count, genreId, year);
         }
 
-        if (count > filmStorage.findAll().size()) {
-            count = filmStorage.findAll().size();
+        List<Integer> topFilmsId = filmStorage.getTopFilms(count);
+
+        if (topFilmsId.isEmpty()) {
+            return filmStorage.findAll().stream()
+                    .limit(count)
+                    .collect(Collectors.toList());
         }
 
-        return new ArrayList<>(filmStorage.findAll()).stream()
-                .sorted((film1, film2) -> film2.getLikes().size() - film1.getLikes().size())
-                .limit(count)
+        return topFilmsId.stream()
+                .map(this::getFilmById)
                 .collect(Collectors.toList());
+    }
 
+    private List<Film> getTopFilmsByFilter(int count, int genreId, int year) {
+        List<Integer> topFilteredIds;
+
+        // Если задан год - получаем топ фильмов. Иначе только по жанру
+        if (year > 0) {
+
+            // Если год меньше начала создания фильмов или больше текущего -> ошибка
+            if (year < 1895 || year > Year.now().getValue()) {
+                throw new ValidationException("Некорректный год сортировки");
+            }
+
+            topFilteredIds = filmStorage.getTopYearFilm(year);
+
+            // Если задан жанр фильтруем по нему
+            if (genreId > 0) {
+                return topFilteredIds.stream()
+                        .map(this::getFilmById)
+                        .filter((film) -> film.getGenres().contains(getGenreById(genreId)))
+                        .collect(Collectors.toList());
+            }
+
+        } else {
+            topFilteredIds = filmStorage.getTopGenreFilm(genreId);
+        }
+
+        return topFilteredIds.stream()
+                .limit(count)
+                .map(this::getFilmById)
+                .collect(Collectors.toList());
     }
 
     public List<Genre> findAllGenres() {

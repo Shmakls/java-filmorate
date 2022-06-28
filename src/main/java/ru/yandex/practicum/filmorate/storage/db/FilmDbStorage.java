@@ -153,4 +153,19 @@ public class FilmDbStorage implements FilmStorage {
     public List<Mpa> getAllMpa() {
         return mpaDao.getAllMpa();
     }
+
+    @Override
+    public List<Integer> getTopFilms(int count) {
+        return likesListDao.getTopFilms(count);
+    }
+
+    @Override
+    public List<Integer> getTopYearFilm(int year) {
+        return likesListDao.getTopFilmsByYear(year);
+    }
+
+    @Override
+    public List<Integer> getTopGenreFilm(int genreId) {
+        return likesListDao.getTopFilmsByGenre(genreId);
+    }
 }
