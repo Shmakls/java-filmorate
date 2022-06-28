@@ -153,4 +153,5 @@ public class FilmDbStorage implements FilmStorage {
     public List<Mpa> getAllMpa() {
         return mpaDao.getAllMpa();
     }
+
 }

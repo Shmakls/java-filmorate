@@ -46,4 +46,12 @@ public class LikesListDao {
         jdbcTemplate.update(sql, id);
 
     }
+
+    public Set<Integer> getLikesListByUserId(Integer id) {
+
+        String sql = "SELECT film_id FROM LIKESLIST WHERE user_id = ?";
+
+        return new HashSet<>(jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("film_id"), id));
+
+    }
 }

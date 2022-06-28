@@ -3,13 +3,17 @@ package ru.yandex.practicum.filmorate.service;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage.UserStorage;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,12 +24,15 @@ public class UserService {
     private UserStorage userStorage;
     private UserValidator userValidator;
 
+    private FilmService filmService;
+
     private Integer id = 0;
 
     @Autowired
-    public UserService(@Qualifier("UserDbStorage") UserStorage userStorage) {
+    public UserService(@Qualifier("UserDbStorage") UserStorage userStorage, @Lazy FilmService filmService) {
         this.userStorage = userStorage;
         userValidator = new UserValidator();
+        this.filmService = filmService;
     }
 
     public User createUser(User user) {
@@ -126,4 +133,47 @@ public class UserService {
 
     }
 
+    public Set<Film> getFilmRecommendations(int userId) {
+
+        Set<Film> result = new HashSet<>();
+
+        if (!userStorage.isContains(userId)) {
+            throw new IncorrectIdException("Такого пользователя не существует.");
+        }
+
+        Set<Integer> likesListByUser = userStorage.getFilmsLikeListByUser(userId);
+
+        List<User> allUsers = findAll();
+
+        Set<Integer> allUsersId = allUsers.stream().map(User::getId).collect(Collectors.toSet());
+
+        int intersectionAmount = 0;
+        int otherUserWithMaxInterception = -1;
+        Set<Integer> filmsIdToRecommend = null;
+
+        for (Integer otherUserId : allUsersId) {
+
+            Set<Integer> likesListByOtherUser = userStorage.getFilmsLikeListByUser(otherUserId);
+            Set<Integer> intersectionList = Sets.intersection(likesListByUser, likesListByOtherUser);
+
+            if (intersectionList.size() > intersectionAmount) {
+                intersectionAmount = intersectionList.size();
+                otherUserWithMaxInterception = otherUserId;
+
+                intersectionList.forEach(likesListByOtherUser::remove);
+                filmsIdToRecommend = likesListByOtherUser;
+
+            }
+
+        }
+
+        if (otherUserWithMaxInterception != -1 && filmsIdToRecommend != null) {
+            for (Integer filmId : filmsIdToRecommend) {
+
+                result.add(filmService.getFilmById(filmId));
+
+            }
+        }
+        return result;
+    }
 }
