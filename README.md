@@ -2,3 +2,5 @@
 Template repository for Filmorate project.
 Link for DB diagram:
 %QuickDBD-filmorateDB.png
+
+# ПРОВЕРКА СВЯЗИ
