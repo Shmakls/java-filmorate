@@ -54,26 +54,51 @@ public class LikesListDao {
 
     // Получение id топа фильмов за N год. Сортировка по лайкам
     public List<Integer> getTopFilmsByYear(int year) {
-        String sql = "SELECT fy.film_id " +
+        String sqlWithoutLikes = "SELECT fy.film_id " +
                 "FROM (SELECT film_id " +
                 "FROM FILMS " +
-                "WHERE year(releasedate) = ?) AS fy " +
+                "WHERE year(releasedate) = ?) AS fy";
+
+        String joinLikes = sqlWithoutLikes + " " +
                 "INNER JOIN likeslist l on fy.film_id = l.film_id " +
                 "GROUP BY l.film_id " +
                 "ORDER BY COUNT(user_id) DESC";
-        return jdbcTemplate.queryForList(sql, Integer.class, year);
+
+        return getGetTopFilterLogic(joinLikes, sqlWithoutLikes, year);
     }
 
     // Получение id топа фильмов за N год. Сортировка по лайкам
     public List<Integer> getTopFilmsByGenre(int genre) {
-        String sql = "SELECT fg.film_id " +
+        String sqlWithoutLikes = "SELECT fg.film_id " +
                 "FROM (SELECT films.film_id " +
                 "FROM films " +
-                "INNER JOIN genreslist as g ON films.film_id = g.film_id" +
-                "WHERE genre_id = ?) AS fg " +
+                "INNER JOIN genreslist as g ON films.film_id = g.film_id " +
+                "WHERE genre_id = ?) AS fg";
+
+        String joinLikes = sqlWithoutLikes + " " +
                 "INNER JOIN likeslist l on fg.film_id = l.film_id " +
                 "GROUP BY l.film_id " +
                 "ORDER BY COUNT(user_id) DESC";
-        return jdbcTemplate.queryForList(sql, Integer.class, genre);
+
+        return getGetTopFilterLogic(joinLikes, sqlWithoutLikes, genre);
+    }
+
+    private List<Integer> getGetTopFilterLogic(String withLikes, String withoutLikes, int filter) {
+        List<Integer> idsWithLikes = jdbcTemplate.queryForList(withLikes, Integer.class, filter);
+
+        // Если полученный топ фильмов пуст
+        // по причине отсутствия лайков, то возвращаем только фильмы конкретного фильтра
+        if (!idsWithLikes.isEmpty()) {
+            return idsWithLikes;
+        } else {
+            List<Integer> onlyGenresFiltered = jdbcTemplate.queryForList(withoutLikes, Integer.class, filter);
+
+            if (!onlyGenresFiltered.isEmpty()) {
+                return onlyGenresFiltered;
+            }
+        }
+
+        // Если и по фильтру нет ни одного фильма, возвращаем пустой лист
+        return List.of();
     }
 }

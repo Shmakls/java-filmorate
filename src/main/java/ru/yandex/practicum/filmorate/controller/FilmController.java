@@ -4,22 +4,20 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Year;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -81,8 +79,8 @@ public class FilmController {
     @GetMapping("/popular")
     public List<Film> topFilmsByLikes(@RequestParam(required = false, defaultValue = "10") @Positive int count,
                                       @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int genreId,
-                                      @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int date) {
-
-        return filmService.topLikes(count, genreId, date);
+                                      @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int year) {
+        log.info("Получен запрос на получение топ фильмов count = {}, genreId = {}, date = {}", count, genreId, year);
+        return filmService.topLikes(count, genreId, year);
     }
 }

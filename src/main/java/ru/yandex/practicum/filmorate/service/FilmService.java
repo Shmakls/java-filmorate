@@ -10,11 +10,9 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.db.FilmDbStorage;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -125,24 +123,25 @@ public class FilmService {
 
     // Получение топ N фильмов. В случае если genreId и/или year > 0 применяем фильтрацию по ним.
     public List<Film> topLikes(int count, int genreId, int year) {
-
         if (genreId > 0 || year > 0) {
             return getTopFilmsByFilter(count, genreId, year);
+        } else if (genreId == 0 && year == 0) {
+            List<Integer> topFilmsId = filmStorage.getTopFilms(count);
+
+            if (!topFilmsId.isEmpty()) {
+                return topFilmsId.stream()
+                        .map(this::getFilmById)
+                        .collect(Collectors.toList());
+            }
         }
 
-        List<Integer> topFilmsId = filmStorage.getTopFilms(count);
-
-        if (topFilmsId.isEmpty()) {
-            return filmStorage.findAll().stream()
-                    .limit(count)
-                    .collect(Collectors.toList());
-        }
-
-        return topFilmsId.stream()
-                .map(this::getFilmById)
+        return filmStorage.findAll().stream()
+                .limit(count)
                 .collect(Collectors.toList());
+
     }
 
+    // Получение фильмов с учетом жанра и/или года
     private List<Film> getTopFilmsByFilter(int count, int genreId, int year) {
         List<Integer> topFilteredIds;
 
@@ -159,6 +158,7 @@ public class FilmService {
             // Если задан жанр фильтруем по нему
             if (genreId > 0) {
                 return topFilteredIds.stream()
+                        .limit(count)
                         .map(this::getFilmById)
                         .filter((film) -> film.getGenres().contains(getGenreById(genreId)))
                         .collect(Collectors.toList());
