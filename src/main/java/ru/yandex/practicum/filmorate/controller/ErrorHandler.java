@@ -4,10 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.yandex.practicum.filmorate.exceptions.ErrorResponse;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.exceptions.*;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -20,11 +17,16 @@ public class ErrorHandler {
 
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({
+            FilmNotFoundException.class,
+            IncorrectIdException.class,
+            ReviewNotFoundException.class,
+            UsefulNotFoundException.class,
+            UserNotFoundException.class
+    })
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse incorrectIdExceptionHandler(final IncorrectIdException e) {
-
-        return new ErrorResponse("error:" + e.getMessage());
+    public ErrorResponse incorrectIdExceptionHandler(RuntimeException e) {
+        return new ErrorResponse(e.getMessage());
 
     }
 

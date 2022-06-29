@@ -116,7 +116,6 @@ class FilmServiceTest {
 
         filmService.addFilm(film1);
         filmService.addFilm(film2);
-
     }
 
     private void createFilms() {
