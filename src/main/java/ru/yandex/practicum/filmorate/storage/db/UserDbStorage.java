@@ -68,7 +68,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public void delete(Integer id) {
 
-        friendsListDao.delete(id);
+        //friendsListDao.delete(id);
 
         usersDao.deleteUserById(id);
 

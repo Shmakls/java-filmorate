@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS films (
 );
 
 CREATE TABLE IF NOT EXISTS friendList (
-    user_id INTEGER REFERENCES users (user_id),
-    friend_id INTEGER REFERENCES users (user_id)
+    user_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE,
+    friend_id INTEGER REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS likesList (
