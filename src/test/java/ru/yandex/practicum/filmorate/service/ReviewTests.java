@@ -118,10 +118,10 @@ public class ReviewTests {
     @Test
     public void checkReviewsCountForAnotherFilm() {
         filmService.addFilm(film2);
-        userService.createUser(user1);
+        userService.createUser(user3);
         userService.createUser(user2);
 
-        Review review1 = Review.builder().content("Good film").isPositive(true).userId(1).filmId(1).build();
+        Review review1 = Review.builder().content("Good film").isPositive(true).userId(3).filmId(3).build();
         reviewService.add(review1);
         Review review2 = Review.builder().content("Bad film").isPositive(false).userId(2).filmId(1).build();
         reviewService.add(review2);
