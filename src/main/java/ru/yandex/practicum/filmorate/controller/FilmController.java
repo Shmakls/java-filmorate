@@ -9,6 +9,8 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -67,9 +69,15 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<Film> topFilmsByLikes(@RequestParam(defaultValue = "10") Integer count) {
+    /*public List<Film> topFilmsByLikes(@RequestParam(defaultValue = "10") Integer count) {
 
-        return filmService.topLikes(count);
+        return filmService.topLikes(count);*/
+
+    public List<Film> topFilmsByLikes(@RequestParam(required = false, defaultValue = "10") @Positive int count,
+                                      @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int genreId,
+                                      @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int year) {
+        log.info("Получен запрос на получение топ фильмов count = {}, genreId = {}, date = {}", count, genreId, year);
+        return filmService.topLikes(count, genreId, year);
 
     }
 
