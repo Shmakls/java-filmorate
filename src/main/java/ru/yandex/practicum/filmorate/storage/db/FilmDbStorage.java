@@ -8,13 +8,10 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.db.dao.FilmsDao;
-import ru.yandex.practicum.filmorate.storage.db.dao.GenresDao;
-import ru.yandex.practicum.filmorate.storage.db.dao.GenresListDao;
-import ru.yandex.practicum.filmorate.storage.db.dao.LikesListDao;
-import ru.yandex.practicum.filmorate.storage.db.dao.MpaDao;
+import ru.yandex.practicum.filmorate.storage.db.dao.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,12 +19,12 @@ import java.util.Set;
 @Qualifier("FilmDbStorage")
 public class FilmDbStorage implements FilmStorage {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final FilmsDao filmsDao;
-    private final LikesListDao likesListDao;
-    private final GenresListDao genresListDao;
-    private final MpaDao mpaDao;
-    private final GenresDao genresDao;
+    private JdbcTemplate jdbcTemplate;
+    private FilmsDao filmsDao;
+    private LikesListDao likesListDao;
+    private GenresListDao genresListDao;
+    private MpaDao mpaDao;
+    private GenresDao genresDao;
 
     @Autowired
     public FilmDbStorage(JdbcTemplate jdbcTemplate, FilmsDao filmsDao, LikesListDao likesListDao, GenresListDao genresListDao, MpaDao mpaDao, GenresDao genresDao) {
@@ -155,20 +152,5 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Mpa> getAllMpa() {
         return mpaDao.getAllMpa();
-    }
-
-    @Override
-    public List<Integer> getTopFilms(int count) {
-        return likesListDao.getTopFilms(count);
-    }
-
-    @Override
-    public List<Integer> getTopYearFilm(int year) {
-        return likesListDao.getTopFilmsByYear(year);
-    }
-
-    @Override
-    public List<Integer> getTopGenreFilm(int genreId) {
-        return likesListDao.getTopFilmsByGenre(genreId);
     }
 }

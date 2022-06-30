@@ -326,7 +326,7 @@ class FilmServiceTest {
 
         assertEquals(5, filmService.findAll().size());
 
-        List<Film> testFilmRating = filmService.topLikes(5, 0, 0);
+        List<Film> testFilmRating = filmService.topLikes(5);
 
         assertEquals(film5.getName(), testFilmRating.get(0).getName());
         assertEquals(film4.getName(), testFilmRating.get(1).getName());
