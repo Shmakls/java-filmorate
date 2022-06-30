@@ -22,7 +22,7 @@ public class FilmsDao {
 
         String insertSql = "INSERT INTO FILMS (NAME, DESCRIPTION, RELEASEDATE, DURATION, RATING_ID) VALUES (?, ?, ?, ?, ?)";
 
-        String selectSql = "SELECT film_id FROM FILMS WHERE NAME = ?";
+        String selectSql = "SELECT film_id FROM FILMS WHERE NAME = ? AND DESCRIPTION = ?";
 
 
 
@@ -32,7 +32,7 @@ public class FilmsDao {
                 film.getDuration(),
                 film.getMpa().getId());
 
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(selectSql, film.getName());
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(selectSql, film.getName(), film.getDescription());
 
         int id = 0;
 
