@@ -101,4 +101,13 @@ public class LikesListDao {
         // Если и по фильтру нет ни одного фильма, возвращаем пустой лист
         return List.of();
     }
+
+    public Set<Integer> getLikesListByUserId(Integer id) {
+
+        String sql = "SELECT film_id FROM LIKESLIST WHERE user_id = ?";
+
+        return new HashSet<>(jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("film_id"), id));
+
+
+    }
 }

@@ -6,12 +6,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
 
     private final UserService userService;
+
+    @Lazy private final FilmService filmService;
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -326,5 +332,100 @@ class UserServiceTest {
         assertEquals(5, userService.findAll().size());
 
     }
+
+    @Test
+    void shouldBeGiveRecommendations() {
+
+        userService.createUser(user1);
+        userService.createUser(user2);
+        userService.createUser(user3);
+        userService.createUser(user4);
+        userService.createUser(user5);
+
+        Film film1 = new Film("film1", "descriptionFilm1", LocalDate.of(2000, 1, 1), 100);
+        film1.setMpa(new Mpa(1));
+        Film film2 = new Film("film2", "descriptionFilm2", LocalDate.of(2000, 2, 2), 110);
+        film2.setMpa(new Mpa(1));
+        Film film3 = new Film("film3", "descriptionFilm3", LocalDate.of(2000, 3, 3), 120);
+        film3.setMpa(new Mpa(1));
+        Film film4 = new Film("film4", "descriptionFilm4", LocalDate.of(2000, 4, 4), 130);
+        film4.setMpa(new Mpa(1));
+        Film film5 = new Film("film5", "descriptionFilm5", LocalDate.of(2000, 5, 5), 140);
+        film5.setMpa(new Mpa(1));
+
+        filmService.addFilm(film1);
+        filmService.addFilm(film2);
+        filmService.addFilm(film3);
+        filmService.addFilm(film4);
+        filmService.addFilm(film5);
+
+        filmService.addLike(1, 1);
+        filmService.addLike(1, 2);
+
+        assertEquals(2, filmService.getFilmById(1).getLikes().size());
+
+        filmService.addLike(2, 1);
+        filmService.addLike(3, 1);
+        filmService.addLike(4, 1);
+        filmService.addLike(5, 1);
+
+
+        filmService.addLike(1, 4);
+        filmService.addLike(2, 4);
+        filmService.addLike(3, 4);
+
+        filmService.addLike(1, 5);
+
+        assertEquals(4, filmService.getFilmById(1).getLikes().size());
+
+        Set<Film> recommendedFilm = userService.getFilmRecommendations(4);
+
+        assertEquals(2, recommendedFilm.size());
+
+    }
+
+    @Test
+    public void shouldBeReturnEmptySetWhenNothingToRecommend() {
+
+        userService.createUser(user1);
+        userService.createUser(user2);
+        userService.createUser(user3);
+        userService.createUser(user4);
+        userService.createUser(user5);
+
+        Film film1 = new Film("film1", "descriptionFilm1", LocalDate.of(2000, 1, 1), 100);
+        film1.setMpa(new Mpa(1));
+        Film film2 = new Film("film2", "descriptionFilm2", LocalDate.of(2000, 2, 2), 110);
+        film2.setMpa(new Mpa(1));
+        Film film3 = new Film("film3", "descriptionFilm3", LocalDate.of(2000, 3, 3), 120);
+        film3.setMpa(new Mpa(1));
+        Film film4 = new Film("film4", "descriptionFilm4", LocalDate.of(2000, 4, 4), 130);
+        film4.setMpa(new Mpa(1));
+        Film film5 = new Film("film5", "descriptionFilm5", LocalDate.of(2000, 5, 5), 140);
+        film5.setMpa(new Mpa(1));
+
+        filmService.addFilm(film1);
+        filmService.addFilm(film2);
+        filmService.addFilm(film3);
+        filmService.addFilm(film4);
+        filmService.addFilm(film5);
+
+        Set<Film> recommendedFilm = userService.getFilmRecommendations(1);
+
+        assertEquals(0, recommendedFilm.size());
+
+        filmService.addLike(1, 1);
+        filmService.addLike(2, 1);
+
+        filmService.addLike(1, 3);
+        filmService.addLike(2, 3);
+
+        recommendedFilm = userService.getFilmRecommendations(1);
+
+        assertEquals(0, recommendedFilm.size());
+
+    }
+
+
 
 }
