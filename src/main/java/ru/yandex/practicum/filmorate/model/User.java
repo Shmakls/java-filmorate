@@ -25,6 +25,6 @@ public class User {
 
     private Set<Integer> friends = new HashSet<>();
 
-    private Set<Integer> subscribers = new HashSet<>();
+    private Set<Integer> filmsLikes = new HashSet<>();
 
 }
