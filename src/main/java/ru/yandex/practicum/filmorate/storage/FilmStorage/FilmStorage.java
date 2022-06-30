@@ -33,4 +33,6 @@ public interface FilmStorage {
     List<Integer> getTopYearFilm(int year);
 
     List<Integer> getTopGenreFilm(int genreId);
+
+    List<Film> getCommonFilms(Integer user1, Integer user2);
 }

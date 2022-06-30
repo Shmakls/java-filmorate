@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import java.util.*;
 
 @Component
 public class FilmsDao {
@@ -75,6 +76,35 @@ public class FilmsDao {
 
         jdbcTemplate.update(sql, id);
 
+    }
+
+    public List<Film> getCommonFilms(Integer userId, Integer friendId) {
+
+        String sql = "SELECT f.film_id, f.name, description, releasedate, duration, f.rating_id FROM" +
+                " films AS f " +
+                "LEFT JOIN (SELECT film_id, COUNT(film_id) AS count_like FROM likeslist GROUP BY film_id) USING (film_id) " +
+                "RIGHT JOIN likeslist AS l1 ON f.film_id = l1.film_id " +
+                "RIGHT JOIN likeslist AS l2 ON l1.film_id = l2.film_id " +
+                "WHERE l1.user_id = ? AND l2.user_id = ?" +
+                "ORDER BY count_like DESC;";
+
+        String mpa_SQL = "SELECT * FROM MPA;";
+
+        List<Film> result = new ArrayList<>();
+
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql,userId,friendId);
+
+        if (rowSet.next()) {
+           Film film = new Film(rowSet.getString("name"),
+                    rowSet.getString("description"),
+                    rowSet.getDate("releaseDate").toLocalDate(),
+                    rowSet.getInt("duration"));
+           film.setId(rowSet.getInt("film_id"));
+           film.setMpa(new MpaDao(jdbcTemplate).getMpaById(rowSet.getInt("rating_id")));
+           result.add(film);
+        }
+
+        return result;
     }
 
 }
