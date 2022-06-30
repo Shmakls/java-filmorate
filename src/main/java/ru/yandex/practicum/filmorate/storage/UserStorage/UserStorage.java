@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserStorage {
 
@@ -17,5 +18,7 @@ public interface UserStorage {
     User getUserById(Integer id);
 
     boolean isContains(Integer id);
+
+    Set<Integer> getFilmsLikeListByUser(Integer id);
 
 }

@@ -34,7 +34,7 @@ public class UsersDao {
 
             return user;
         } else {
-            throw new IncorrectIdException("Отсутсвуют данные в БД по указанному ID");
+            throw new IncorrectIdException("Отсутствуют данные в БД по указанному ID");
         }
     }
 
