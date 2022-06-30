@@ -32,7 +32,6 @@ public class ReviewTests {
     private final UserService userService;
     private final ReviewService reviewService;
     private static Film film1;
-    private static Film film2;
     private static User user1;
     private static User user2;
     private static User user3;
@@ -42,10 +41,6 @@ public class ReviewTests {
         film1 = new Film("film1", "Description for Film1", LocalDate.of(1989, 7, 29), 90);
         film1.setId(1);
         film1.setMpa(new Mpa(1));
-
-        film2 = new Film("film2", "Description for Film2", LocalDate.of(1989, 7, 29), 90);
-        film2.setId(2);
-        film2.setMpa(new Mpa(1));
 
         user1 = new User("user1@ya.ru", "user1", LocalDate.of(1989, 7, 29));
         user1.setId(1);
@@ -113,19 +108,6 @@ public class ReviewTests {
         Review review = Review.builder().content("Good film").isPositive(true).userId(1).filmId(1).build();
         reviewService.add(review);
         assertThat(reviewService.getForFilm(1, 10).size(), is(equalTo(1)));
-    }
-
-    @Test
-    public void checkReviewsCountForAnotherFilm() {
-        filmService.addFilm(film2);
-        userService.createUser(user3);
-        userService.createUser(user2);
-
-        Review review1 = Review.builder().content("Good film").isPositive(true).userId(3).filmId(3).build();
-        reviewService.add(review1);
-        Review review2 = Review.builder().content("Bad film").isPositive(false).userId(2).filmId(1).build();
-        reviewService.add(review2);
-        assertThat(reviewService.getForFilm(1, 1).size(), is(equalTo(1)));
     }
 
     @Test
