@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.storage.UserStorage.UserStorage;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
 
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    private UserStorage userStorage;
-    private UserValidator userValidator;
+    private final UserStorage userStorage;
+    private final UserValidator userValidator;
 
-    private FilmService filmService;
+    private final FilmService filmService;
 
     private Integer id = 0;
 

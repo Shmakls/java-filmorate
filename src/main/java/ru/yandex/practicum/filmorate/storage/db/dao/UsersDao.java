@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.model.User;
 @Component
 public class UsersDao {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public UsersDao(JdbcTemplate jdbcTemplate) {

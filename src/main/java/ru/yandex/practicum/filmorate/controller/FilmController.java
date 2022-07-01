@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.constraints.NotNull;
@@ -19,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class FilmController {
 
-    private FilmService filmService;
+    private final FilmService filmService;
 
     @Autowired
     public FilmController(FilmService filmService) {
@@ -83,7 +81,9 @@ public class FilmController {
     }
 
     @DeleteMapping("/{filmId}")
-    public void deleteFilm(@PathVariable int filmId) {
+    public void deleteFilm(@PathVariable @Positive int filmId) {
+
+        log.info("Получен запрос на удаление фильма id = {}", filmId);
 
         filmService.deleteFilm(filmId);
 
