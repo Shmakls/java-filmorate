@@ -77,7 +77,7 @@ public class UserService {
 
         Set<Integer> friends = user1.getFriends();
 
-        if(!friends.add(user2.getId())) {
+        if (!friends.add(user2.getId())) {
             throw new IncorrectIdException("Пользователь уже есть в друзьях");
         }
 
@@ -108,7 +108,7 @@ public class UserService {
 
     }
 
-    public List<User> getFriendList(Integer id)  {
+    public List<User> getFriendList(Integer id) {
 
         return userStorage.getUserById(id).getFriends().stream()
                 .map(friendId -> (userStorage.getUserById(friendId)))
@@ -116,7 +116,7 @@ public class UserService {
 
     }
 
-    public List<User> getCommonFriendsListAsLogins (Integer id, Integer otherId) {
+    public List<User> getCommonFriendsListAsLogins(Integer id, Integer otherId) {
 
         User user1 = userStorage.getUserById(id);
         User user2 = userStorage.getUserById(otherId);

@@ -11,7 +11,7 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 @Component
 public class FilmsDao {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public FilmsDao(JdbcTemplate jdbcTemplate) {
@@ -22,9 +22,8 @@ public class FilmsDao {
 
         String insertSql = "INSERT INTO FILMS (NAME, DESCRIPTION, RELEASEDATE, DURATION, RATING_ID) VALUES (?, ?, ?, ?, ?)";
 
-        String selectSql = "SELECT film_id FROM FILMS WHERE NAME = ?";
-
-
+        String selectSql = "SELECT film_id FROM FILMS WHERE NAME = ? AND DESCRIPTION = ? AND RELEASEDATE = ? " +
+                "AND DURATION = ? AND RATING_ID = ?";
 
         jdbcTemplate.update(insertSql, film.getName(),
                 film.getDescription(),
@@ -32,7 +31,8 @@ public class FilmsDao {
                 film.getDuration(),
                 film.getMpa().getId());
 
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(selectSql, film.getName());
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(selectSql, film.getName(), film.getDescription(),
+                film.getReleaseDate(), film.getDuration(), film.getMpa().getId());
 
         int id = 0;
 

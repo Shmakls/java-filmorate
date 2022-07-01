@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 
+import javax.validation.constraints.Positive;
 import java.util.*;
 
 
@@ -80,8 +81,12 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable int userId) {
+    public void deleteUser(@PathVariable @Positive int userId) {
+
+        log.info("Получен запрос на удаление пользователя id = {}", userId);
+
         userService.deleteUser(userId);
+
     }
 
     @GetMapping

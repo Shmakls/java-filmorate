@@ -69,10 +69,6 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    /*public List<Film> topFilmsByLikes(@RequestParam(defaultValue = "10") Integer count) {
-
-        return filmService.topLikes(count);*/
-
     public List<Film> topFilmsByLikes(@RequestParam(required = false, defaultValue = "10") @Positive int count,
                                       @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int genreId,
                                       @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int year) {
@@ -82,9 +78,11 @@ public class FilmController {
     }
 
     @DeleteMapping("/{filmId}")
-    public void deleteFilm(@PathVariable int filmId) {
+    public void deleteFilm(@PathVariable @Positive int filmId) {
+
+        log.info("Получен запрос на удаление фильма id = {}", filmId);
 
         filmService.deleteFilm(filmId);
-
     }
+
 }
