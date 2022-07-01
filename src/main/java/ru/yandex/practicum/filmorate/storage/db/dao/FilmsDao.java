@@ -80,15 +80,11 @@ public class FilmsDao {
 
     public List<Film> getCommonFilms(Integer userId, Integer friendId) {
 
-        String sql = "SELECT f.film_id, f.name, description, releasedate, duration, f.rating_id FROM" +
-                " films AS f " +
-                "LEFT JOIN (SELECT film_id, COUNT(film_id) AS count_like FROM likeslist GROUP BY film_id) USING (film_id) " +
-                "RIGHT JOIN likeslist AS l1 ON f.film_id = l1.film_id " +
-                "RIGHT JOIN likeslist AS l2 ON l1.film_id = l2.film_id " +
-                "WHERE l1.user_id = ? AND l2.user_id = ?" +
-                "ORDER BY count_like DESC;";
-
-        String mpa_SQL = "SELECT * FROM MPA;";
+        String sql = "SELECT * FROM FILMS "+
+        "WHERE FILM_ID IN (SELECT FILM_ID FROM likeslist WHERE USER_ID  = ?) "+
+        "INTERSECT "+
+        "SELECT * FROM FILMS "+
+        "WHERE FILM_ID IN (SELECT FILM_ID FROM likeslist WHERE USER_ID  = ?)";
 
         List<Film> result = new ArrayList<>();
 

@@ -90,7 +90,8 @@ public class FilmController {
     }
 
     @GetMapping("/common")
-    public List<Film> commonFilms(@NotNull @Positive @RequestParam Integer userId, Integer friendId) {
+    public List<Film> commonFilms(@NotNull @Positive @RequestParam Integer userId,
+                                  @NotNull @Positive @RequestParam Integer friendId) {
         log.info("Запрошены общие фильмы пользователей id = {} и id = {}", userId, friendId);
         return filmService.getCommonFilms(userId, friendId);
     }
