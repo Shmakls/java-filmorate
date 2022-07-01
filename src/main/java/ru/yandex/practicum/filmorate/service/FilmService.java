@@ -206,4 +206,8 @@ public class FilmService {
         return filmStorage.getAllMpa();
     }
 
+    public List<Film> getCommonFilms(Integer user1, Integer user2) {
+        return filmStorage.getCommonFilms(user1, user2);
+    }
+
 }

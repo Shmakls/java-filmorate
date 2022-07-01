@@ -171,4 +171,9 @@ public class FilmDbStorage implements FilmStorage {
     public List<Integer> getTopGenreFilm(int genreId) {
         return likesListDao.getTopFilmsByGenre(genreId);
     }
+
+    @Override
+    public List<Film> getCommonFilms(Integer user1, Integer user2) {
+        return filmsDao.getCommonFilms(user1,user2);
+    }
 }
