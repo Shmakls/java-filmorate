@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import java.util.*;
 
 @Component
 public class FilmsDao {
@@ -75,6 +76,31 @@ public class FilmsDao {
 
         jdbcTemplate.update(sql, id);
 
+    }
+
+    public List<Film> getCommonFilms(Integer userId, Integer friendId) {
+
+        String sql = "SELECT * FROM FILMS "+
+        "WHERE FILM_ID IN (SELECT FILM_ID FROM likeslist WHERE USER_ID  = ?) "+
+        "INTERSECT "+
+        "SELECT * FROM FILMS "+
+        "WHERE FILM_ID IN (SELECT FILM_ID FROM likeslist WHERE USER_ID  = ?)";
+
+        List<Film> result = new ArrayList<>();
+
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql,userId,friendId);
+
+        if (rowSet.next()) {
+           Film film = new Film(rowSet.getString("name"),
+                    rowSet.getString("description"),
+                    rowSet.getDate("releaseDate").toLocalDate(),
+                    rowSet.getInt("duration"));
+           film.setId(rowSet.getInt("film_id"));
+           film.setMpa(new MpaDao(jdbcTemplate).getMpaById(rowSet.getInt("rating_id")));
+           result.add(film);
+        }
+
+        return result;
     }
 
 }

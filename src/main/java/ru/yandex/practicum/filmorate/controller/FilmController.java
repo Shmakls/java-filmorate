@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
@@ -87,4 +88,12 @@ public class FilmController {
         filmService.deleteFilm(filmId);
 
     }
+
+    @GetMapping("/common")
+    public List<Film> commonFilms(@NotNull @Positive @RequestParam Integer userId,
+                                  @NotNull @Positive @RequestParam Integer friendId) {
+        log.info("Запрошены общие фильмы пользователей id = {} и id = {}", userId, friendId);
+        return filmService.getCommonFilms(userId, friendId);
+    }
+
 }
