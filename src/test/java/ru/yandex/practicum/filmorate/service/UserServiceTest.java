@@ -98,6 +98,14 @@ class UserServiceTest {
                 "    IS_LIKE          BOOLEAN,\n" +
                 "    IS_DELETE        BOOLEAN DEFAULT FALSE\n" +
                 ");" +
+                "CREATE TABLE IF NOT EXISTS directors (\n" +
+                "    director_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n" +
+                "    name varchar(100) NOT NULL\n" +
+                ");\n" +
+                "CREATE TABLE IF NOT EXISTS directors_list (\n" +
+                "    film_id INTEGER REFERENCES films (film_id) ON DELETE CASCADE,\n" +
+                "    director_id INTEGER REFERENCES directors (director_id) ON DELETE CASCADE\n" +
+                ");" +
                 "\n" +
                 "INSERT INTO genres (name)\n" +
                 "VALUES ('Комедия' );\n" +
@@ -123,7 +131,7 @@ class UserServiceTest {
                 "INSERT INTO mpa (name)\n" +
                 "VALUES ('NC-17');";
 
-        jdbcTemplate.update("DROP TABLE REVIEW, REVIEW_USEFUL, FILMS, FRIENDLIST, GENRES, GENRESLIST, LIKESLIST, MPA, USERS");
+        jdbcTemplate.update("DROP TABLE FILMS, FRIENDLIST, GENRES, GENRESLIST, LIKESLIST, MPA, USERS, DIRECTORS, DIRECTORS_LIST, REVIEW, REVIEW_USEFUL");
         jdbcTemplate.update(createSql);
 
         user1 = new User("user1@ya.ru", "user1", LocalDate.of(1989, 7, 29));

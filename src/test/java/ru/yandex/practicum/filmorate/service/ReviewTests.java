@@ -42,15 +42,15 @@ public class ReviewTests {
         film1.setId(1);
         film1.setMpa(new Mpa(1));
 
-        user1 = new User("user1@ya.ru", "user1", LocalDate.of(1989, 7, 29));
+        user1 = new User("user2@ya.ru", "user1", LocalDate.of(1989, 7, 29));
         user1.setId(1);
         user1.setName("Пользователь 1");
 
-        user2 = new User("user2@ya.ru", "user2", LocalDate.of(1989, 7, 29));
+        user2 = new User("user3@ya.ru", "user2", LocalDate.of(1989, 7, 29));
         user2.setId(2);
         user2.setName("Пользователь 2");
 
-        user3 = new User("user3@ya.ru", "user3", LocalDate.of(1989, 7, 29));
+        user3 = new User("user4@ya.ru", "user3", LocalDate.of(1989, 7, 29));
         user3.setId(3);
         user3.setName("Пользователь 3");
     }
