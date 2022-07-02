@@ -89,6 +89,18 @@ public class FilmController {
 
     }
 
+    @GetMapping("/director/{directorId}")
+    public List<Film> getTopFilmsByDirector(@PathVariable @Positive int directorId,
+                                            @RequestParam(name = "sortBy",
+                                                    required = false,
+                                                    defaultValue = "") String sortBy) {
+
+        log.info("Получен запрос на получение топ фильмов режиссера directorId = {}," +
+                " отсортированного по {}", directorId, sortBy);
+
+        return filmService.getTopFilmsByDirector(directorId, sortBy);
+    }
+
     @GetMapping("/common")
     public List<Film> commonFilms(@NotNull @Positive @RequestParam Integer userId,
                                   @NotNull @Positive @RequestParam Integer friendId) {

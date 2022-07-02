@@ -98,6 +98,14 @@ class FilmServiceTest {
                 "    IS_LIKE          BOOLEAN,\n" +
                 "    IS_DELETE        BOOLEAN DEFAULT FALSE\n" +
                 ");" +
+                "CREATE TABLE IF NOT EXISTS directors (\n" +
+                "    director_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n" +
+                "    name varchar(100) NOT NULL\n" +
+                ");\n" +
+                "CREATE TABLE IF NOT EXISTS directors_list (\n" +
+                "    film_id INTEGER REFERENCES films (film_id) ON DELETE CASCADE,\n" +
+                "    director_id INTEGER REFERENCES directors (director_id) ON DELETE CASCADE\n" +
+                ");" +
                 "\n" +
                 "INSERT INTO genres (name)\n" +
                 "VALUES ('Комедия' );\n" +
@@ -123,7 +131,7 @@ class FilmServiceTest {
                 "INSERT INTO mpa (name)\n" +
                 "VALUES ('NC-17');";
 
-        jdbcTemplate.update("DROP TABLE REVIEW, REVIEW_USEFUL, FILMS, FRIENDLIST, GENRES, GENRESLIST, LIKESLIST, MPA, USERS");
+        jdbcTemplate.update("DROP TABLE FILMS, FRIENDLIST, GENRES, GENRESLIST, LIKESLIST, MPA, USERS, DIRECTORS, DIRECTORS_LIST, REVIEW, REVIEW_USEFUL");
         jdbcTemplate.update(createSql);
 
         user1 = new User("user1@ya.ru", "user1", LocalDate.of(1989, 7, 29));
@@ -142,9 +150,11 @@ class FilmServiceTest {
         film1 = new Film("film1", "descriptionFilm1", LocalDate.of(2020, 12, 12), 90);
         film1.setId(1);
         film1.setMpa(new Mpa(1));
+        film1.setDirectors(List.of());
         film2 = new Film("film2", "descriptionFilm2", LocalDate.of(2020, 11, 11), 100);
         film2.setId(2);
         film2.setMpa(new Mpa(2));
+        film2.setDirectors(List.of());
 
     }
 

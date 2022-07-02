@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @RequiredArgsConstructor
@@ -26,4 +28,5 @@ public class Film {
 
     private Mpa mpa;
 
+    private List<Director> directors;
 }

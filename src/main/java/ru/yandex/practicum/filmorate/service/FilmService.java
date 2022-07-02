@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.AlreadyExistException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage.FilmStorage;
+import ru.yandex.practicum.filmorate.validators.DirectorValidator;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
 import java.time.Year;
@@ -210,4 +212,55 @@ public class FilmService {
         return filmStorage.getCommonFilms(user1, user2);
     }
 
+    public List<Director> findAllDirectors() {
+        return filmStorage.getAllDirectors();
+    }
+    public Director getDirectorById(Integer id) {
+        List<Director> allDirectors = findAllDirectors();
+
+        if (id > allDirectors.size() || id < 1) {
+            throw new IncorrectIdException("Некорректный Id режиссера");
+        }
+
+        return allDirectors
+                .stream()
+                .filter(x -> x.getId() == id)
+                .findFirst()
+                .get();
+    }
+
+    public Director createDirector(Director director) {
+        DirectorValidator.isValid(director);
+        return filmStorage.createDirector(director);
+    }
+
+    public Director updateDirector(Director director) {
+        DirectorValidator.isValid(director);
+
+        if (director.getId() > findAllDirectors().size() || director.getId() < 1) {
+            throw new IncorrectIdException("Некорректный Id режиссера");
+        }
+
+        return filmStorage.updateDirector(director);
+    }
+
+    public void removeDirector(Integer id) {
+        if (id > findAllDirectors().size() || id < 1) {
+            throw new IncorrectIdException("Некорректный Id режиссера");
+        }
+
+        filmStorage.removeDirector(id);
+    }
+
+    public List<Film> getTopFilmsByDirector(Integer id, String sortBy) {
+        if (id > findAllDirectors().size() || id < 1) {
+            throw new IncorrectIdException("Некорректный Id режиссера");
+        }
+
+        return filmStorage
+                .getFilmsByDirectorSorted(id, sortBy)
+                .stream()
+                .map(this::getFilmById)
+                .collect(Collectors.toList());
+    }
 }

@@ -4,15 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.db.dao.FilmsDao;
-import ru.yandex.practicum.filmorate.storage.db.dao.GenresDao;
-import ru.yandex.practicum.filmorate.storage.db.dao.GenresListDao;
-import ru.yandex.practicum.filmorate.storage.db.dao.LikesListDao;
-import ru.yandex.practicum.filmorate.storage.db.dao.MpaDao;
+import ru.yandex.practicum.filmorate.storage.db.dao.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +26,27 @@ public class FilmDbStorage implements FilmStorage {
     private final MpaDao mpaDao;
     private final GenresDao genresDao;
 
+    private final DirectorDao directorDao;
+
+    private final DirectorsListDao directorsListDao;
+
     @Autowired
-    public FilmDbStorage(JdbcTemplate jdbcTemplate, FilmsDao filmsDao, LikesListDao likesListDao, GenresListDao genresListDao, MpaDao mpaDao, GenresDao genresDao) {
+    public FilmDbStorage(JdbcTemplate jdbcTemplate,
+                         FilmsDao filmsDao,
+                         LikesListDao likesListDao,
+                         GenresListDao genresListDao,
+                         MpaDao mpaDao,
+                         GenresDao genresDao,
+                         DirectorDao directorDao,
+                         DirectorsListDao directorsListDao) {
         this.jdbcTemplate = jdbcTemplate;
         this.filmsDao = filmsDao;
         this.likesListDao = likesListDao;
         this.genresListDao = genresListDao;
         this.mpaDao = mpaDao;
         this.genresDao = genresDao;
+        this.directorsListDao = directorsListDao;
+        this.directorDao = directorDao;
     }
 
     @Override
@@ -48,6 +58,7 @@ public class FilmDbStorage implements FilmStorage {
 
         genresListDao.saveGenresListByFilm(filmWithId);
         likesListDao.saveLikesListByFilm(filmWithId);
+        directorsListDao.saveDirectorsListByFilm(filmWithId);
 
         return filmWithId;
 
@@ -65,6 +76,9 @@ public class FilmDbStorage implements FilmStorage {
 
             genresListDao.delete(film.getId());
             genresListDao.saveGenresListByFilm(film);
+
+            directorsListDao.delete(film.getId());
+            directorsListDao.saveDirectorsListByFilm(film);
 
             jdbcTemplate.update(sql, film.getName(),
                     film.getDescription(),
@@ -97,7 +111,7 @@ public class FilmDbStorage implements FilmStorage {
 
         List<Film> films = new ArrayList<>();
 
-        List<Integer> filmsId = jdbcTemplate.query("SELECT film_id FROM FILMS", ((rs, rowNum) -> rs.getInt("film_id")));
+        List<Integer> filmsId = jdbcTemplate.query("SELECT film_id FROM FILMS ORDER BY film_id ASC;", ((rs, rowNum) -> rs.getInt("film_id")));
 
         for (Integer filmId : filmsId) {
             films.add(getFilmById(filmId));
@@ -124,9 +138,22 @@ public class FilmDbStorage implements FilmStorage {
             }
         }
 
+        List<Director> directors = new ArrayList<>();
+        //List<Director> directors = null;
+        Set<Integer> directorsId = directorsListDao.getDirectorsSetIdByFilmId(id);
+
+        if (directorsId.size() > 0) {
+            directors = new ArrayList<>();
+            for (Integer directorId : directorsId) {
+                directors.add(directorDao.getDirectorById(directorId));
+            }
+        }
+
         film.setMpa(mpaDao.getMpaById(film.getMpa().getId()));
 
         film.setGenres(genres);
+
+        film.setDirectors(directors);
 
         return film;
     }
@@ -175,5 +202,42 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> getCommonFilms(Integer user1, Integer user2) {
         return filmsDao.getCommonFilms(user1,user2);
+    }
+
+    @Override
+    public List<Integer> getFilmsByDirectorSorted(int directorId, String sortBy) {
+        switch (sortBy) {
+            case "year":
+                return directorsListDao.getFilmsByDirectorSortedByYear(directorId);
+            case "likes":
+                return directorsListDao.getFilmsByDirectorSortedByLikes(directorId);
+            default:
+                return directorsListDao.getFilmsByDirectorNotSorted(directorId);
+        }
+    }
+
+    @Override
+    public List<Director> getAllDirectors() {
+        return directorDao.getAllDirectors();
+    }
+
+    @Override
+    public Director createDirector(Director director) {
+        return directorDao.createDirector(director);
+    }
+
+    @Override
+    public Director updateDirector(Director director) {
+        return directorDao.updateDirector(director);
+    }
+
+    @Override
+    public void removeDirector(Integer id) {
+        directorDao.removeDirector(id);
+    }
+
+    @Override
+    public Director getDirectorById(Integer id) {
+        return directorDao.getDirectorById(id);
     }
 }
