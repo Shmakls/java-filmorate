@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class FilmController {
 
-    private FilmService filmService;
+    private final FilmService filmService;
 
     @Autowired
     public FilmController(FilmService filmService) {
@@ -81,7 +81,9 @@ public class FilmController {
     }
 
     @DeleteMapping("/{filmId}")
-    public void deleteFilm(@PathVariable int filmId) {
+    public void deleteFilm(@PathVariable @Positive int filmId) {
+
+        log.info("Получен запрос на удаление фильма id = {}", filmId);
 
         filmService.deleteFilm(filmId);
 

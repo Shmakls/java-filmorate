@@ -18,11 +18,11 @@ import java.util.Set;
 @Qualifier("UserDbStorage")
 public class UserDbStorage implements UserStorage {
 
-    private JdbcTemplate jdbcTemplate;
-    private UsersDao usersDao;
-    private FriendsListDao friendsListDao;
+    private final JdbcTemplate jdbcTemplate;
+    private final UsersDao usersDao;
+    private final FriendsListDao friendsListDao;
 
-    private LikesListDao likesListDao;
+    private final LikesListDao likesListDao;
 
     @Autowired
     public UserDbStorage(JdbcTemplate jdbcTemplate, UsersDao usersDao, FriendsListDao friendsListDao, LikesListDao likesListDao) {
@@ -69,8 +69,6 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void delete(Integer id) {
-
-        //friendsListDao.delete(id);
 
         usersDao.deleteUserById(id);
 

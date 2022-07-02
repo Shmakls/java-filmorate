@@ -12,7 +12,7 @@ import java.util.*;
 @Component
 public class FilmsDao {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public FilmsDao(JdbcTemplate jdbcTemplate) {
@@ -23,9 +23,8 @@ public class FilmsDao {
 
         String insertSql = "INSERT INTO FILMS (NAME, DESCRIPTION, RELEASEDATE, DURATION, RATING_ID) VALUES (?, ?, ?, ?, ?)";
 
-        String selectSql = "SELECT film_id FROM FILMS WHERE NAME = ? AND DESCRIPTION = ?";
-
-
+        String selectSql = "SELECT film_id FROM FILMS WHERE NAME = ? AND DESCRIPTION = ? " +
+                "AND RELEASEDATE = ? AND DURATION = ?";
 
         jdbcTemplate.update(insertSql, film.getName(),
                 film.getDescription(),
@@ -33,7 +32,8 @@ public class FilmsDao {
                 film.getDuration(),
                 film.getMpa().getId());
 
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(selectSql, film.getName(), film.getDescription());
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(selectSql,
+                film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration());
 
         int id = 0;
 

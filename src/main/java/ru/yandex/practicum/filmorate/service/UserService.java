@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.storage.UserStorage.UserStorage;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
 
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    private UserStorage userStorage;
-    private UserValidator userValidator;
+    private final UserStorage userStorage;
+    private final UserValidator userValidator;
 
-    private FilmService filmService;
+    private final FilmService filmService;
 
     private Integer id = 0;
 
@@ -77,7 +76,7 @@ public class UserService {
 
         Set<Integer> friends = user1.getFriends();
 
-        if(!friends.add(user2.getId())) {
+        if (!friends.add(user2.getId())) {
             throw new IncorrectIdException("Пользователь уже есть в друзьях");
         }
 
@@ -108,7 +107,7 @@ public class UserService {
 
     }
 
-    public List<User> getFriendList(Integer id)  {
+    public List<User> getFriendList(Integer id) {
 
         return userStorage.getUserById(id).getFriends().stream()
                 .map(friendId -> (userStorage.getUserById(friendId)))
@@ -116,7 +115,7 @@ public class UserService {
 
     }
 
-    public List<User> getCommonFriendsListAsLogins (Integer id, Integer otherId) {
+    public List<User> getCommonFriendsListAsLogins(Integer id, Integer otherId) {
 
         User user1 = userStorage.getUserById(id);
         User user2 = userStorage.getUserById(otherId);

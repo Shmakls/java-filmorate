@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 @Service
 public class FilmService {
 
-    private FilmStorage filmStorage;
-    private UserService userService;
+    private final FilmStorage filmStorage;
+    private final UserService userService;
 
-    private FilmValidator filmValidator;
+    private final FilmValidator filmValidator;
 
     private Integer id = 0;
 
