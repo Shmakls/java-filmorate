@@ -1,8 +1,10 @@
 package ru.yandex.practicum.filmorate.storage.FilmStorage;
 
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.storage.db.dao.DirectorDao;
 
 import java.util.List;
 
@@ -35,4 +37,16 @@ public interface FilmStorage {
     List<Integer> getTopGenreFilm(int genreId);
 
     List<Film> getCommonFilms(Integer user1, Integer user2);
+
+    List<Integer> getFilmsByDirectorSorted(int directorId, String sortBy);
+
+    List<Director> getAllDirectors();
+
+    Director createDirector(Director director);
+
+    Director updateDirector(Director director);
+
+    void removeDirector(Integer director_id);
+
+    Director getDirectorById(Integer id);
 }
