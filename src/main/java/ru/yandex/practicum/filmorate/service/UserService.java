@@ -152,16 +152,18 @@ public class UserService {
 
         for (Integer otherUserId : allUsersId) {
 
-            Set<Integer> likesListByOtherUser = userStorage.getFilmsLikeListByUser(otherUserId);
-            Set<Integer> intersectionList = Sets.intersection(likesListByUser, likesListByOtherUser);
+            if (!(userId == otherUserId)) {
+                Set<Integer> likesListByOtherUser = userStorage.getFilmsLikeListByUser(otherUserId);
+                Set<Integer> intersectionList = Sets.intersection(likesListByUser, likesListByOtherUser);
 
-            if (intersectionList.size() > intersectionAmount) {
-                intersectionAmount = intersectionList.size();
-                otherUserWithMaxInterception = otherUserId;
+                if (intersectionList.size() > intersectionAmount) {
+                    intersectionAmount = intersectionList.size();
+                    otherUserWithMaxInterception = otherUserId;
 
-                intersectionList.forEach(likesListByOtherUser::remove);
-                filmsIdToRecommend = likesListByOtherUser;
+                    intersectionList.forEach(likesListByOtherUser::remove);
+                    filmsIdToRecommend = likesListByOtherUser;
 
+                }
             }
 
         }

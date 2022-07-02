@@ -3,7 +3,6 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-/db/
 
 ### STS ###
 .apt_generated
@@ -34,3 +33,4 @@ build/
 .vscode/
 *.db
 db/filmorate.trace.db
+*.db
