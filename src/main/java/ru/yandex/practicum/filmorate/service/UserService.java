@@ -58,7 +58,7 @@ public class UserService {
 
     public User getUserById(Integer id) {
 
-        if (!userStorage.isContains(id)) {
+        if (!userStorage.contains(id)) {
             throw new IncorrectIdException("Такого пользователя не сушествует.");
         }
 
@@ -99,7 +99,7 @@ public class UserService {
 
     public void deleteUser(Integer id) {
 
-        if (!userStorage.isContains(id)) {
+        if (!userStorage.contains(id)) {
             throw new IncorrectIdException("Такого пользователя не сушествует.");
         }
 
@@ -136,7 +136,7 @@ public class UserService {
 
         Set<Film> result = new HashSet<>();
 
-        if (!userStorage.isContains(userId)) {
+        if (!userStorage.contains(userId)) {
             throw new IncorrectIdException("Такого пользователя не существует.");
         }
 

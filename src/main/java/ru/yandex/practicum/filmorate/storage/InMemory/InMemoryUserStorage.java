@@ -50,7 +50,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public boolean isContains(Integer id) {
+    public boolean contains(Integer id) {
         return users.containsKey(id);
     }
 
@@ -58,4 +58,11 @@ public class InMemoryUserStorage implements UserStorage {
     public Set<Integer> getFilmsLikeListByUser(Integer id) {
         return null;
     }
+
+    @Override
+    public boolean isExists(Integer id) {
+        return false;
+    }
+
+
 }

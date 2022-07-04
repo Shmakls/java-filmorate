@@ -86,6 +86,11 @@ public class ReviewDbStorage implements ReviewStorage {
         jdbcTemplate.update(DELETE_REVIEW, reviewId);
     }
 
+    @Override
+    public boolean isExists(Integer id) {
+        return !(findById(id) == null);
+    }
+
     private Review mapRowToReview(ResultSet resultSet, int rowNum) throws SQLException {
         return Review.builder()
                 .id(resultSet.getInt("REVIEW_ID"))

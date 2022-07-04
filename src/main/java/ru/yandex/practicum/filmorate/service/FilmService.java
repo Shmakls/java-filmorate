@@ -27,6 +27,8 @@ public class FilmService {
 
     private final FilmValidator filmValidator;
 
+    private final DirectorValidator directorValidator;
+
     private Integer id = 0;
 
     @Autowired
@@ -34,6 +36,7 @@ public class FilmService {
         this.userService = userService;
         this.filmStorage = filmStorage;
         filmValidator = new FilmValidator();
+        directorValidator = new DirectorValidator();
     }
 
     public Film addFilm(Film film) {
@@ -60,7 +63,7 @@ public class FilmService {
 
     public void deleteFilm(Integer id) {
 
-        if (!filmStorage.isContains(id)) {
+        if (!filmStorage.contains(id)) {
             throw new IncorrectIdException("Такой ID не сушествует.");
         }
 
@@ -69,7 +72,7 @@ public class FilmService {
 
     public Film getFilmById(Integer id) {
 
-        if (!filmStorage.isContains(id)) {
+        if (!filmStorage.contains(id)) {
             throw new IncorrectIdException("Такой ID не сушествует.");
         }
 
@@ -83,7 +86,7 @@ public class FilmService {
 
     public String addLike(Integer id, Integer userId) {
 
-        if (!filmStorage.isContains(id)) {
+        if (!filmStorage.contains(id)) {
             throw new IncorrectIdException("Такого фильма не существует");
         }
 
@@ -104,7 +107,7 @@ public class FilmService {
 
     public String deleteLike(Integer id, Integer userId) {
 
-        if (!filmStorage.isContains(id)) {
+        if (!filmStorage.contains(id)) {
             throw new IncorrectIdException("Такого фильма не существует");
         }
 
@@ -160,7 +163,6 @@ public class FilmService {
             // Если задан жанр фильтруем по нему
             if (genreId > 0) {
                 return topFilteredIds.stream()
-                        .limit(count)
                         .map(this::getFilmById)
                         .filter((film) -> film.getGenres().contains(getGenreById(genreId)))
                         .collect(Collectors.toList());
@@ -171,7 +173,6 @@ public class FilmService {
         }
 
         return topFilteredIds.stream()
-                .limit(count)
                 .map(this::getFilmById)
                 .collect(Collectors.toList());
     }
@@ -230,12 +231,12 @@ public class FilmService {
     }
 
     public Director createDirector(Director director) {
-        DirectorValidator.isValid(director);
+        directorValidator.isValid(director);
         return filmStorage.createDirector(director);
     }
 
     public Director updateDirector(Director director) {
-        DirectorValidator.isValid(director);
+        directorValidator.isValid(director);
 
         if (director.getId() > findAllDirectors().size() || director.getId() < 1) {
             throw new IncorrectIdException("Некорректный Id режиссера");

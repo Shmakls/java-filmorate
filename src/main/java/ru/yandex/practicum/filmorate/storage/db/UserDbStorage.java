@@ -46,7 +46,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User update(User user) {
 
-        if (isContains(user.getId())) {
+        if (contains(user.getId())) {
 
             String sql = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE user_id = ?";
 
@@ -100,7 +100,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public boolean isContains(Integer id) {
+    public boolean contains(Integer id) {
         String sql = "SELECT * FROM USERS WHERE user_id = ?";
         return jdbcTemplate.queryForRowSet(sql, id).next();
     }
@@ -111,4 +111,10 @@ public class UserDbStorage implements UserStorage {
         return likesListDao.getLikesListByUserId(id);
 
     }
+
+    @Override
+    public boolean isExists(Integer id) {
+        return !(getUserById(id)== null);
+    }
+
 }

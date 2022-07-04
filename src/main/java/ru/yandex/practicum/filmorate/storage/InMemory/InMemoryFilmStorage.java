@@ -51,7 +51,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public boolean isContains(Integer id) {
+    public boolean contains(Integer id) {
         return films.containsKey(id);
     }
 
@@ -123,5 +123,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Director getDirectorById(Integer id) {
         return null;
+    }
+
+    @Override
+    public boolean isExists(Integer id) {
+        return false;
     }
 }

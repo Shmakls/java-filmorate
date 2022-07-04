@@ -4,7 +4,6 @@ import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.storage.db.dao.DirectorDao;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public interface FilmStorage {
 
     Film getFilmById (Integer id);
 
-    boolean isContains(Integer id);
+    boolean contains(Integer id);
 
     Genre getGenreById(Integer id);
 
@@ -49,4 +48,7 @@ public interface FilmStorage {
     void removeDirector(Integer director_id);
 
     Director getDirectorById(Integer id);
+
+    boolean isExists(Integer id);
+
 }

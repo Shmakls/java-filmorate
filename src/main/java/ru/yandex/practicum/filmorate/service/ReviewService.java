@@ -50,7 +50,7 @@ public class ReviewService {
     }
 
     public Review update(Review review) throws ReviewNotFoundException {
-        if (reviewStorage.findById(review.getId()) == null) {
+        if (!reviewStorage.isExists(review.getId())) {
             throw new ReviewNotFoundException("Review not found");
         } else {
             return reviewStorage.update(review);
@@ -58,7 +58,7 @@ public class ReviewService {
     }
 
     public Review findById(Integer id) throws ReviewNotFoundException {
-        if (reviewStorage.findById(id) == null) {
+        if (!reviewStorage.isExists(id)) {
             throw new ReviewNotFoundException("Review not found");
         } else {
             return reviewStorage.findById(id);
@@ -72,7 +72,7 @@ public class ReviewService {
                     .thenComparing(Review::getId));
             return getReviews;
         } else {
-            if (filmStorage.getFilmById(id) == null) {
+            if (!filmStorage.isExists(id)) {
                 throw new FilmNotFoundException("Film not found");
             } else {
                 List<Review> getReviews = reviewStorage.getForFilm(id, count);
@@ -85,9 +85,9 @@ public class ReviewService {
 
     public void addLike(Integer reviewId, Integer userId) throws ReviewNotFoundException, UserNotFoundException,
             LikeRecordAlreadyExistsException {
-        if (userStorage.getUserById(userId) == null) {
+        if (!userStorage.isExists(userId)) {
             throw new UserNotFoundException("User not found");
-        } else if (reviewStorage.findById(reviewId) == null) {
+        } else if (!reviewStorage.isExists(reviewId)) {
             throw new ReviewNotFoundException("Review not found");
         } else if (reviewUsefulStorage.isInUseful(reviewId, userId)) {
             throw new LikeRecordAlreadyExistsException("Review already exists");
@@ -98,9 +98,9 @@ public class ReviewService {
 
     public void removeLike(Integer reviewId, Integer userId) throws UserNotFoundException,
             ReviewNotFoundException {
-        if (userStorage.getUserById(userId) == null) {
+        if (!userStorage.isExists(userId)) {
             throw new UserNotFoundException("User not found");
-        } else if (reviewStorage.findById(reviewId) == null) {
+        } else if (!reviewStorage.isExists(reviewId)) {
             throw new ReviewNotFoundException("Review not found");
         } else {
             reviewUsefulStorage.removeLike(reviewId, userId);
@@ -109,9 +109,9 @@ public class ReviewService {
 
     public void addDislike(Integer reviewId, Integer userId) throws UserNotFoundException, ReviewNotFoundException,
             LikeRecordAlreadyExistsException {
-        if (userStorage.getUserById(userId) == null) {
+        if (!userStorage.isExists(userId)) {
             throw new UserNotFoundException("User not found");
-        } else if (reviewStorage.findById(reviewId) == null) {
+        } else if (!reviewStorage.isExists(reviewId)) {
             throw new ReviewNotFoundException("Review not found");
         } else if (reviewUsefulStorage.isInUseful(reviewId, userId)) {
             throw new LikeRecordAlreadyExistsException("Review already exists");
@@ -122,9 +122,9 @@ public class ReviewService {
 
     public void removeDislike(Integer reviewId, Integer userId) throws UserNotFoundException,
             ReviewNotFoundException {
-        if (userStorage.getUserById(userId) == null) {
+        if (!userStorage.isExists(userId)) {
             throw new UserNotFoundException("User not found");
-        } else if (reviewStorage.findById(reviewId) == null) {
+        } else if (!reviewStorage.isExists(reviewId)) {
             throw new ReviewNotFoundException("Review not found");
         } else {
             reviewUsefulStorage.removeDislike(reviewId, userId);
@@ -132,7 +132,7 @@ public class ReviewService {
     }
 
     public void deleteById(Integer reviewId) throws ReviewNotFoundException {
-        if (reviewStorage.findById(reviewId) == null) {
+        if (!reviewStorage.isExists(reviewId)) {
             throw new ReviewNotFoundException("Review not found");
         } else {
             reviewStorage.deleteById(reviewId);

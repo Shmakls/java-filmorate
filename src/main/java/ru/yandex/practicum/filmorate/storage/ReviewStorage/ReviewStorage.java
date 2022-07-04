@@ -16,4 +16,7 @@ public interface ReviewStorage {
     List<Review> getAllReviews(Integer count);
 
     void deleteById(Integer reviewId);
+
+    boolean isExists(Integer id);
+
 }

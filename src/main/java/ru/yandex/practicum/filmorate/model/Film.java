@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @Data
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class Film {
 
     private Integer id;

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Director;
@@ -9,15 +10,11 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/directors")
 public class DirectorsController {
 
     private final FilmService filmService;
-
-    @Autowired
-    public DirectorsController(FilmService filmService) {
-        this.filmService = filmService;
-    }
 
     @GetMapping("/{id}")
     public Director getDirectorById(@PathVariable @Positive int id) {

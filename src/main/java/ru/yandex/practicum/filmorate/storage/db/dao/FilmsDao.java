@@ -14,9 +14,12 @@ public class FilmsDao {
 
     private final JdbcTemplate jdbcTemplate;
 
+    private final MpaDao mpaDao;
+
     @Autowired
-    public FilmsDao(JdbcTemplate jdbcTemplate) {
+    public FilmsDao(JdbcTemplate jdbcTemplate, MpaDao mpaDao) {
         this.jdbcTemplate = jdbcTemplate;
+        this.mpaDao = new MpaDao(jdbcTemplate);
     }
 
     public Film save(Film film) {
@@ -96,7 +99,7 @@ public class FilmsDao {
                     rowSet.getDate("releaseDate").toLocalDate(),
                     rowSet.getInt("duration"));
            film.setId(rowSet.getInt("film_id"));
-           film.setMpa(new MpaDao(jdbcTemplate).getMpaById(rowSet.getInt("rating_id")));
+           film.setMpa(mpaDao.getMpaById(rowSet.getInt("rating_id")));
            result.add(film);
         }
 

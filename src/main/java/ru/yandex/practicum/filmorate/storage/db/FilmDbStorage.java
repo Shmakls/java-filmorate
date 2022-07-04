@@ -67,7 +67,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film update(Film film) {
 
-        if (isContains(film.getId())) {
+        if (contains(film.getId())) {
 
             String sql = "UPDATE films SET name = ?, description = ?, releaseDate = ?, duration = ?, rating_id = ? WHERE film_id = ?";
 
@@ -159,7 +159,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public boolean isContains(Integer id) {
+    public boolean contains(Integer id) {
         String sql = "SELECT * FROM FILMS WHERE film_id = ?";
         return jdbcTemplate.queryForRowSet(sql, id).next();
     }
@@ -239,5 +239,10 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Director getDirectorById(Integer id) {
         return directorDao.getDirectorById(id);
+    }
+
+    @Override
+    public boolean isExists(Integer id) {
+        return !(getFilmById(id) == null);
     }
 }
