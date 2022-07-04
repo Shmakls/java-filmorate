@@ -1,16 +1,17 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Data
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class Film {
 
     private Integer id;
@@ -29,4 +30,5 @@ public class Film {
 
     private Mpa mpa;
 
+    private List<Director> directors;
 }

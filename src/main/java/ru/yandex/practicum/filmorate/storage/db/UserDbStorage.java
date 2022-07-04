@@ -7,27 +7,29 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage.UserStorage;
 import ru.yandex.practicum.filmorate.storage.db.dao.FriendsListDao;
-import ru.yandex.practicum.filmorate.storage.db.dao.SubscribesListDao;
+import ru.yandex.practicum.filmorate.storage.db.dao.LikesListDao;
 import ru.yandex.practicum.filmorate.storage.db.dao.UsersDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Qualifier("UserDbStorage")
 public class UserDbStorage implements UserStorage {
 
-    private JdbcTemplate jdbcTemplate;
-    private UsersDao usersDao;
-    private FriendsListDao friendsListDao;
-    private SubscribesListDao subscribersListDao;
+    private final JdbcTemplate jdbcTemplate;
+    private final UsersDao usersDao;
+    private final FriendsListDao friendsListDao;
+
+    private final LikesListDao likesListDao;
 
     @Autowired
-    public UserDbStorage(JdbcTemplate jdbcTemplate, UsersDao usersDao, FriendsListDao friendsListDao, SubscribesListDao subscribersListDao) {
+    public UserDbStorage(JdbcTemplate jdbcTemplate, UsersDao usersDao, FriendsListDao friendsListDao, LikesListDao likesListDao) {
         this.jdbcTemplate = jdbcTemplate;
         this.usersDao = usersDao;
         this.friendsListDao = friendsListDao;
-        this.subscribersListDao = subscribersListDao;
+        this.likesListDao = likesListDao;
     }
 
     @Override
@@ -44,7 +46,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User update(User user) {
 
-        if (isContains(user.getId())) {
+        if (contains(user.getId())) {
 
             String sql = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE user_id = ?";
 
@@ -67,8 +69,6 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void delete(Integer id) {
-
-        friendsListDao.delete(id);
 
         usersDao.deleteUserById(id);
 
@@ -100,8 +100,21 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public boolean isContains(Integer id) {
+    public boolean contains(Integer id) {
         String sql = "SELECT * FROM USERS WHERE user_id = ?";
         return jdbcTemplate.queryForRowSet(sql, id).next();
     }
+
+    @Override
+    public Set<Integer> getFilmsLikeListByUser(Integer id) {
+
+        return likesListDao.getLikesListByUserId(id);
+
+    }
+
+    @Override
+    public boolean isExists(Integer id) {
+        return !(getUserById(id)== null);
+    }
+
 }

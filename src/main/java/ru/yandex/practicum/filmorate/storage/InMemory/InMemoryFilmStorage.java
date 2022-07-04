@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage.InMemory;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -50,7 +51,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public boolean isContains(Integer id) {
+    public boolean contains(Integer id) {
         return films.containsKey(id);
     }
 
@@ -72,5 +73,60 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public List<Mpa> getAllMpa() {
         return null;
+    }
+
+    @Override
+    public List<Integer> getTopFilms(int count) {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getTopYearFilm(int year, int limit) {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getTopGenreFilm(int genreId) {
+        return null;
+    }
+
+    @Override
+    public List<Film> getCommonFilms (Integer user1, Integer user2) {
+        return null;
+    }
+
+    @Override
+    public List<Integer> getFilmsByDirectorSorted(int directorId, String sortBy) {
+        return null;
+    }
+
+    @Override
+    public List<Director> getAllDirectors() {
+        return null;
+    }
+
+    @Override
+    public Director createDirector(Director director) {
+        return null;
+    }
+
+    @Override
+    public Director updateDirector(Director director) {
+        return null;
+    }
+
+    @Override
+    public void removeDirector(Integer director_id) {
+
+    }
+
+    @Override
+    public Director getDirectorById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public boolean isExists(Integer id) {
+        return false;
     }
 }

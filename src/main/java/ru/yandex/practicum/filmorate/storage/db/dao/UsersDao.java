@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.model.User;
 @Component
 public class UsersDao {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public UsersDao(JdbcTemplate jdbcTemplate) {
@@ -34,7 +34,7 @@ public class UsersDao {
 
             return user;
         } else {
-            throw new IncorrectIdException("Отсутсвуют данные в БД по указанному ID");
+            throw new IncorrectIdException("Отсутствуют данные в БД по указанному ID");
         }
     }
 

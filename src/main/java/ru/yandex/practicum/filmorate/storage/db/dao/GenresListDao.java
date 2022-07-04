@@ -5,16 +5,12 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Component
 public class GenresListDao {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public GenresListDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -30,6 +26,8 @@ public class GenresListDao {
 
             Set<Genre> buffer = new HashSet<>(genres);
             genres = new ArrayList<>(buffer);
+
+            genres.sort(Comparator.comparingInt(Genre::getId));
 
             film.setGenres(genres);
 
@@ -50,14 +48,13 @@ public class GenresListDao {
 
     }
 
-    public void delete (Integer id) {
+    public void delete(Integer id) {
 
         String sql = "DELETE FROM GENRESLIST WHERE film_id = ?";
 
         jdbcTemplate.update(sql, id);
 
     }
-
 
 
 }

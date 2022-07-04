@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage.UserStorage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -49,7 +50,19 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public boolean isContains(Integer id) {
+    public boolean contains(Integer id) {
         return users.containsKey(id);
     }
+
+    @Override
+    public Set<Integer> getFilmsLikeListByUser(Integer id) {
+        return null;
+    }
+
+    @Override
+    public boolean isExists(Integer id) {
+        return false;
+    }
+
+
 }
