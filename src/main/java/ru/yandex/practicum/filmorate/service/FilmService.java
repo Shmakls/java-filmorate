@@ -163,6 +163,7 @@ public class FilmService {
             // Если задан жанр фильтруем по нему
             if (genreId > 0) {
                 return topFilteredIds.stream()
+                        .limit(count)
                         .map(this::getFilmById)
                         .filter((film) -> film.getGenres().contains(getGenreById(genreId)))
                         .collect(Collectors.toList());
@@ -173,6 +174,7 @@ public class FilmService {
         }
 
         return topFilteredIds.stream()
+                .limit(count)
                 .map(this::getFilmById)
                 .collect(Collectors.toList());
     }
