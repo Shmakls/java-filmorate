@@ -53,17 +53,15 @@ public class LikesListDao {
     }
 
     // Получение id топа фильмов за N год. Сортировка по лайкам
-    public List<Integer> getTopFilmsByYear(int year) {
-        String sqlWithoutLikes = "SELECT fy.film_id " +
-                "FROM (SELECT film_id " +
-                "FROM FILMS " +
-                "WHERE year(releasedate) = ?) AS fy";
+    public List<Integer> getTopFilmsByYear(int year, int limit) {
+        String sqlWithoutLikes = "SELECT fy.film_id FROM (SELECT film_id FROM FILMS " +
+                "WHERE year(releasedate) = ?) AS fy ";
 
         String joinLikes = sqlWithoutLikes + " " +
                 "INNER JOIN likeslist l on fy.film_id = l.film_id " +
                 "GROUP BY l.film_id " +
-                "ORDER BY COUNT(user_id) DESC";
-
+                "ORDER BY COUNT(user_id) DESC " +
+                "limit " + limit;
         return getGetTopFilterLogic(joinLikes, sqlWithoutLikes, year);
     }
 

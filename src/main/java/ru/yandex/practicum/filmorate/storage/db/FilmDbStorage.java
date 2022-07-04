@@ -190,8 +190,8 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public List<Integer> getTopYearFilm(int year) {
-        return likesListDao.getTopFilmsByYear(year);
+    public List<Integer> getTopYearFilm(int year, int limit) {
+        return likesListDao.getTopFilmsByYear(year, limit);
     }
 
     @Override

@@ -158,12 +158,11 @@ public class FilmService {
                 throw new ValidationException("Некорректный год сортировки");
             }
 
-            topFilteredIds = filmStorage.getTopYearFilm(year);
+            topFilteredIds = filmStorage.getTopYearFilm(year, count);
 
             // Если задан жанр фильтруем по нему
             if (genreId > 0) {
                 return topFilteredIds.stream()
-                        .limit(count)
                         .map(this::getFilmById)
                         .filter((film) -> film.getGenres().contains(getGenreById(genreId)))
                         .collect(Collectors.toList());

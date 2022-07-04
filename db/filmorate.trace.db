@@ -5997,3 +5997,35 @@ SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) A
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy LIMIT 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id ORDER BY COUNT(user_id) DESC LIMIT 10"
 Syntax error in SQL statement "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy LIMIT 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id ORDER BY COUNT(user_id) DESC LIMIT 10"; SQL statement:
 SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy LIMIT 10 INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id ORDER BY COUNT(user_id) DESC LIMIT 10 [42000-212]
+2022-07-04 15:46:32 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"
+Syntax error in SQL statement "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"; SQL statement:
+SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC [42000-212]
+2022-07-04 15:46:32 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"
+Syntax error in SQL statement "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"; SQL statement:
+SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC [42000-212]
+2022-07-04 15:46:32 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"
+Syntax error in SQL statement "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"; SQL statement:
+SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC [42000-212]
+2022-07-04 15:46:32 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"
+Syntax error in SQL statement "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"; SQL statement:
+SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC [42000-212]
+2022-07-04 15:53:05 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"
+Syntax error in SQL statement "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"; SQL statement:
+SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC [42000-212]
+2022-07-04 15:53:05 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"
+Syntax error in SQL statement "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"; SQL statement:
+SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC [42000-212]
+2022-07-04 15:53:05 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"
+Syntax error in SQL statement "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"; SQL statement:
+SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC [42000-212]
+2022-07-04 15:53:05 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"
+Syntax error in SQL statement "SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 [*]INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC"; SQL statement:
+SELECT fy.film_id FROM (SELECT film_id FROM FILMS WHERE year(releasedate) = ?) AS fy limit 10 INNER JOIN likeslist l on fy.film_id = l.film_id GROUP BY l.film_id limit 10ORDER BY COUNT(user_id) DESC [42000-212]
